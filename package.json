@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
+    "@vue/apollo-option": "^4.0.0",
     "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
     "vue": "^3.4.31",

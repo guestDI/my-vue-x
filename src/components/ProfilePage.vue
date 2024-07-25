@@ -56,7 +56,7 @@
       goBack() {
         this.$router.push('/');
       }
-    }
+    },
   };
   </script>
   
