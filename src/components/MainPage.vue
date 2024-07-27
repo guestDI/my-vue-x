@@ -1,4 +1,3 @@
-
 <template>
   <div class="min-h-screen bg-gray-900 text-gray-300 flex">
     <!-- Sidebar -->
@@ -7,7 +6,6 @@
         <h2 class="text-2xl font-bold text-white">Profile</h2>
         <p class="mt-2">John Doe</p>
         <router-link to="/profile">@johndoe</router-link>
-        <!-- <p class="text-gray-400"></p> -->
       </div>
       <div>
         <h2 class="text-2xl font-bold text-white">Trends</h2>
@@ -24,49 +22,91 @@
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-white">Home</h1>
       </div>
-      <div class="mb-6">
+      <div class="mb-6 sticky top-0">
         <textarea
           class="w-full p-2 bg-gray-800 text-white rounded-lg"
           rows="3"
           placeholder="What's happening?"
         ></textarea>
         <div class="flex justify-end mt-2">
-          <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded">
+          <button
+            class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded"
+          >
             Tweet
           </button>
         </div>
       </div>
       <div class="space-y-6">
-        <div class="bg-gray-800 p-4 rounded-lg">
+        <div
+          v-for="character in characters.results"
+          :key="character.id"
+          class="bg-gray-800 p-4 rounded-lg"
+        >
           <div class="flex items-center mb-2">
-            <div class="bg-gray-600 rounded-full h-10 w-10"></div>
+            <div
+              v-if="character.image"
+              class="bg-gray-600 rounded-full h-10 w-10"
+            >
+              <img
+                class="bg-gray-600 rounded-full h-10 w-10"
+                :src="character.image"
+              />
+            </div>
+            <div v-else class="bg-gray-600 rounded-full h-10 w-10">JD</div>
             <div class="ml-2">
-              <p class="text-white font-bold">Jane Smith</p>
-              <p class="text-gray-400">@janesmith</p>
+              <p class="text-white font-bold">{{ character.name }}</p>
+              <p class="text-gray-400">{{ showUserName(character.name) }}</p>
             </div>
           </div>
-          <p>
+          <p class="text-left">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
             odio. Praesent libero. Sed cursus ante dapibus diam.
-          </p>
-        </div>
-        <div class="bg-gray-800 p-4 rounded-lg">
-          <div class="flex items-center mb-2">
-            <div class="bg-gray-600 rounded-full h-10 w-10"></div>
-            <div class="ml-2">
-              <p class="text-white font-bold">Alex Johnson</p>
-              <p class="text-gray-400">@alexjohnson</p>
-            </div>
-          </div>
-          <p>
-            Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis
-            ipsum. Praesent mauris.
           </p>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import gql from "graphql-tag";
+
+const usersQuery = gql`
+  query {
+    characters {
+      results {
+        id
+        name
+        status
+        image
+      }
+    }
+  }
+`;
+
+export default {
+  data: () => ({
+    characters: [],
+    loading: 0,
+  }),
+  methods: {
+    showUserName(name) {
+      return `@${name.split(" ").join("").toLowerCase()}`;
+    },
+  },
+  // Apollo GraphQL
+  apollo: {
+    characters: {
+      // GraphQL query
+      query: usersQuery,
+      // Will update the 'loading' attribute
+      // +1 when a new query is loading
+      // -1 when a query is completed
+      loadingKey: "loading",
+    },
+  },
+};
+</script>
 
 <style scoped>
 .read-the-docs {
