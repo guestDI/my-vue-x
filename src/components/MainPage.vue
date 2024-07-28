@@ -1,11 +1,10 @@
 <template>
   <div class="min-h-screen bg-gray-900 text-gray-300 flex">
     <!-- Sidebar -->
-    <div class="w-1/4 p-4 bg-gray-800">
+    <div class="w-1/4 p-4 bg-gray-800 flex flex-col">
       <div class="mb-8">
         <h2 class="text-2xl font-bold text-white">Profile</h2>
-        <p class="mt-2">John Doe</p>
-        <router-link to="/profile">@johndoe</router-link>
+        @johndoe
       </div>
       <div>
         <h2 class="text-2xl font-bold text-white">Trends</h2>
@@ -18,17 +17,17 @@
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 p-4">
-      <div class="mb-8">
+    <div class="flex-1 p-4 flex flex-col">
+      <div class="sticky top-0 bg-gray-900 pb-4 z-10">
         <h1 class="text-3xl font-bold text-white">Home</h1>
       </div>
-      <div class="mb-6 sticky top-0">
+      <div class="mb-6 sticky top-12 bg-gray-900 py-4">
         <textarea
           class="w-full p-2 bg-gray-800 text-white rounded-lg"
           rows="3"
           placeholder="What's happening?"
         ></textarea>
-        <div class="flex justify-end mt-2">
+        <div class="flex w-full justify-end mt-2">
           <button
             class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded"
           >
@@ -36,7 +35,8 @@
           </button>
         </div>
       </div>
-      <div class="space-y-6">
+      <h3 v-if="loading">Loading...</h3>
+      <div v-else class="flex-1 overflow-y-auto space-y-6 mt-4">
         <div
           v-for="character in characters.results"
           :key="character.id"
@@ -62,7 +62,9 @@
                 ></div>
               </div>
               <p class="text-gray-400 mr-0">
-                {{ showUserName(character.name) }}
+                <router-link :to="`/profile/users/${Number(character.id)}`">{{
+                  showUserName(character.name)
+                }}</router-link>
               </p>
             </div>
           </div>
@@ -78,31 +80,16 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
-import { ref } from "vue";
-
-const usersQuery = gql`
-  query {
-    characters {
-      results {
-        id
-        name
-        status
-        image
-      }
-    }
-  }
-`;
+import { USERS_QUERY } from "../graphql/graphql";
+import { showUserName } from "../utils";
 
 export default {
   data: () => ({
     characters: [],
     loading: 0,
+    showUserName,
   }),
   methods: {
-    showUserName(name) {
-      return `@${name.split(" ").join("").toLowerCase()}`;
-    },
     getDotColor(status) {
       if (status.toLowerCase() === "alive") {
         return "green";
@@ -116,7 +103,7 @@ export default {
   apollo: {
     characters: {
       // GraphQL query
-      query: usersQuery,
+      query: USERS_QUERY,
       // Will update the 'loading' attribute
       // +1 when a new query is loading
       // -1 when a query is completed
