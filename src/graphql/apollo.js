@@ -1,18 +1,14 @@
-import Vue from "vue";
-import { ApolloClient } from "apollo-client";
-import { HttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { onError } from "apollo-link-error";
-import VueApollo from "vue-apollo";
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client/core";
+import { createApolloProvider } from "@vue/apollo-option";
+import { onError } from "@apollo/client/link/error";
 
-const httpLink = new HttpLink({
-  uri: "https://rickandmortyapi.com/graphql",
-});
+const cache = new InMemoryCache();
+const uri = new HttpLink({ uri: "https://rickandmortyapi.com/graphql" });
 
 // Error Handling
-const errorLink = onError(({ graphQLErrors, networkError }) => {
+export const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) =>
+    graphQLErrors.forEach(({ message, locations, path }) =>
       console.log(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
       ),
@@ -20,14 +16,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
-export const apolloClient = new ApolloClient({
-  link: errorLink.concat(httpLink),
-  cache: new InMemoryCache(),
-  connectToDevTools: true,
+const apolloClient = new ApolloClient({
+  link: errorLink.concat(uri),
+  cache,
 });
 
-Vue.use(VueApollo);
-
-export const apolloProvider = new VueApollo({
+export const apolloProvider = createApolloProvider({
   defaultClient: apolloClient,
 });

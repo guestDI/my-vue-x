@@ -54,10 +54,19 @@
             </div>
             <div v-else class="bg-gray-600 rounded-full h-10 w-10">JD</div>
             <div class="ml-2">
-              <p class="text-white font-bold">{{ character.name }}</p>
-              <p class="text-gray-400">{{ showUserName(character.name) }}</p>
+              <div class="flex items-center">
+                <p class="text-white font-bold mr-2">{{ character.name }}</p>
+                <div
+                  class="w-2 h-2 rounded-full"
+                  :style="{ backgroundColor: getDotColor(character.status) }"
+                ></div>
+              </div>
+              <p class="text-gray-400 mr-0">
+                {{ showUserName(character.name) }}
+              </p>
             </div>
           </div>
+
           <p class="text-left">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
             odio. Praesent libero. Sed cursus ante dapibus diam.
@@ -70,6 +79,7 @@
 
 <script>
 import gql from "graphql-tag";
+import { ref } from "vue";
 
 const usersQuery = gql`
   query {
@@ -93,6 +103,14 @@ export default {
     showUserName(name) {
       return `@${name.split(" ").join("").toLowerCase()}`;
     },
+    getDotColor(status) {
+      if (status.toLowerCase() === "alive") {
+        return "green";
+      } else if (status.toLowerCase() === "dead") {
+        return "red";
+      }
+      return "gray";
+    },
   },
   // Apollo GraphQL
   apollo: {
@@ -108,8 +126,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.read-the-docs {
-  color: #888;
-}
-</style>
+<style scoped></style>
