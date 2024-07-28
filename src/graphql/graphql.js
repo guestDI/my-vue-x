@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const USERS_QUERY = gql`
-  query {
+  query UsersQuery {
     characters {
       results {
         id
