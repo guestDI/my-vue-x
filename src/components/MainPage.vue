@@ -12,6 +12,7 @@
           <li>#VueJS</li>
           <li>#TailwindCSS</li>
           <li>#JavaScript</li>
+          <li>#typescript</li>
         </ul>
       </div>
     </div>
