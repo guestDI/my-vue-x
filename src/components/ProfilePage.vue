@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { USER_QUERY } from "../graphql/graphql";
+import { USER_QUERY } from "../graphql/queries";
 import { showUserName } from "../utils";
 
 export default {
