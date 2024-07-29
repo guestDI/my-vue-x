@@ -1,19 +1,30 @@
 import { createServer } from "node:http";
-import { join } from "node:path";
 import { createYoga } from "graphql-yoga";
 import { makeExecutableSchema } from "@graphql-tools/schema";
+import resolvers from "./resolvers.js";
 
 export const schema = makeExecutableSchema({
   typeDefs: /* GraphQL */ `
     type Query {
-      hello: String
+      users: [User!]!
+      comments: [Tweet!]!
+    }
+
+    type User {
+      id: ID!
+      name: String!
+      username: String!
+      image: String
+      comments: [Tweet!]!
+    }
+
+    type Tweet {
+      id: ID!
+      text: String!
+      author: User!
     }
   `,
-  resolvers: {
-    Query: {
-      hello: () => "world",
-    },
-  },
+  resolvers: resolvers,
 });
 
 const yoga = createYoga({ schema });

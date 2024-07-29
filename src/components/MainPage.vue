@@ -39,32 +39,29 @@
       <h3 v-if="loading">Loading...</h3>
       <div v-else class="flex-1 overflow-y-auto space-y-6 mt-4">
         <div
-          v-for="character in characters.results"
-          :key="character.id"
+          v-for="user in users"
+          :key="user.id"
           class="bg-gray-800 p-4 rounded-lg"
         >
           <div class="flex items-center mb-2">
-            <div
-              v-if="character.image"
-              class="bg-gray-600 rounded-full h-10 w-10"
-            >
+            <div v-if="user.image" class="bg-gray-600 rounded-full h-10 w-10">
               <img
                 class="bg-gray-600 rounded-full h-10 w-10"
-                :src="character.image"
+                :src="user.image"
               />
             </div>
             <div v-else class="bg-gray-600 rounded-full h-10 w-10">JD</div>
             <div class="ml-2">
               <div class="flex items-center">
-                <p class="text-white font-bold mr-2">{{ character.name }}</p>
+                <p class="text-white font-bold mr-2">{{ user.name }}</p>
                 <div
                   class="w-2 h-2 rounded-full"
-                  :style="{ backgroundColor: getDotColor(character.status) }"
+                  :style="{ backgroundColor: getDotColor(user.status) }"
                 ></div>
               </div>
               <p class="text-gray-400 mr-0">
-                <router-link :to="`/profile/users/${Number(character.id)}`">{{
-                  showUserName(character.name)
+                <router-link :to="`/profile/users/${Number(user.id)}`">{{
+                  `@${user.username}`
                 }}</router-link>
               </p>
             </div>
@@ -86,12 +83,12 @@ import { showUserName } from "../utils";
 
 export default {
   data: () => ({
-    characters: [],
+    users: [],
     loading: 0,
     showUserName,
   }),
   methods: {
-    getDotColor(status) {
+    getDotColor(status = "") {
       if (status.toLowerCase() === "alive") {
         return "green";
       } else if (status.toLowerCase() === "dead") {
@@ -102,7 +99,7 @@ export default {
   },
   // Apollo GraphQL
   apollo: {
-    characters: {
+    users: {
       // GraphQL query
       query: USERS_QUERY,
       // Will update the 'loading' attribute

@@ -1,9 +1,15 @@
+import users from "../__mocks__/users.json" assert { type: "json" };
+
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
   // Define resolvers for queries
   Query: {
-    // Return all tweets
-    tweets: () => books,
+    // Return all users
+    users(_, args) {
+      return users;
+    },
+
+    // tweets: () => books,
     // Find a book by ID and return it
     // book: (parent, args) => books.find((book) => book.id === args.id),
     // // Return all authors
@@ -22,3 +28,5 @@ const resolvers = {
   //     author: (parent) => authors.find((author) => author.id === parent.authorId),
   //   },
 };
+
+export default resolvers;

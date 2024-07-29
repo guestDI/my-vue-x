@@ -2,13 +2,11 @@ import gql from "graphql-tag";
 
 export const USERS_QUERY = gql`
   query UsersQuery {
-    characters {
-      results {
-        id
-        name
-        status
-        image
-      }
+    users {
+      id
+      name
+      username
+      image
     }
   }
 `;

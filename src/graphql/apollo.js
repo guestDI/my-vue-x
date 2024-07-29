@@ -3,7 +3,7 @@ import { createApolloProvider } from "@vue/apollo-option";
 import { onError } from "@apollo/client/link/error";
 
 const cache = new InMemoryCache();
-const uri = new HttpLink({ uri: "https://rickandmortyapi.com/graphql" });
+const uri = new HttpLink({ uri: "http://localhost:4000/graphql" });
 
 // Error Handling
 export const errorLink = onError(({ graphQLErrors, networkError }) => {
