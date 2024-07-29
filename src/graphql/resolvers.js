@@ -1,42 +1,34 @@
-import users from "../__mocks__/users.json" assert { type: "json" };
-import tweets from "../__mocks__/tweets.json" assert { type: "json" };
+import { v4 as uuidv4 } from "uuid";
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
   // Define resolvers for queries
   Query: {
     // Return all users // rename to authors
-    users(_, args) {
-      return users;
+    users(_, args, { db }) {
+      return db.authors;
     },
     // Return all tweets
-    tweets() {
-      return tweets;
+    tweets(_, args, { db }) {
+      return db.tweets;
     },
-    user: (_, args) => users.find((user) => user.id === args.id),
-    // tweets: () => books,
-    // Find a book by ID and return it
-    // book: (parent, args) => books.find((book) => book.id === args.id),
-    // // Return all authors
-    // authors: () => authors,
-    // // Find an author by ID and return them
-    // author: (parent, args) => authors.find((author) => author.id === args.id),
+    user: (_, args, { db }) => db.authors.find((user) => user.id === args.id),
   },
   Tweet: {
-    author(parent) {
-      return users.find((user) => user.id === parent.authorId);
+    author(parent, _, { db }) {
+      return db.authors.find((user) => user.id === parent.authorId);
     },
   },
-  // Define resolvers for Author type fields
-  //   Author: {
-  //     // Return all books written by the author
-  //     books: (parent) => books.filter((book) => book.authorId === parent.id),
-  //   },
-  // Define resolvers for Book type fields
-  //   Book: {
-  //     // Return the author of the book
-  //     author: (parent) => authors.find((author) => author.id === parent.authorId),
-  //   },
+  Mutation: {
+    addTweet(_, args, context) {
+      const tweet = {
+        id: uuidv4(),
+        ...args.data,
+      };
+
+      return tweet;
+    },
+  },
 };
 
 export default resolvers;
