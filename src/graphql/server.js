@@ -7,7 +7,8 @@ export const schema = makeExecutableSchema({
   typeDefs: /* GraphQL */ `
     type Query {
       users: [User!]!
-      comments: [Tweet!]!
+      tweets: [Tweet]!
+      user(id: ID!): User!
     }
 
     type User {
@@ -15,7 +16,6 @@ export const schema = makeExecutableSchema({
       name: String!
       username: String!
       image: String
-      comments: [Tweet!]!
     }
 
     type Tweet {

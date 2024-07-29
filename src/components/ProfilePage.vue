@@ -10,8 +10,8 @@
       >
         <div class="flex items-center space-x-4">
           <img
-            v-if="character.image"
-            :src="character.image"
+            v-if="user.image"
+            :src="user.image"
             alt="Profile"
             class="w-24 h-24 rounded-full border-4 border-gray-800"
           />
@@ -22,8 +22,8 @@
             class="w-24 h-24 rounded-full border-4 border-gray-800"
           />
           <div>
-            <h1 class="text-3xl font-bold text-white">{{ character.name }}</h1>
-            <p class="text-gray-400">{{ showUserName(character.name) }}</p>
+            <h1 class="text-3xl font-bold text-white">{{ user.name }}</h1>
+            <p class="text-gray-400">@{{ user.username }}</p>
           </div>
         </div>
         <button
@@ -33,10 +33,10 @@
           Back
         </button>
       </div>
-      <div class="p-6 space-y-4">
+      <div class="p-6 space-y-4 text-left">
         <section>
           <h2 class="text-xl font-semibold text-white">Bio</h2>
-          <p class="mt-2 text-gray-300">
+          <p class="mt-2 text-gray-300 text-left">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
@@ -48,21 +48,6 @@
         <section>
           <h2 class="text-xl font-semibold text-white">Following</h2>
           <p class="mt-2 text-gray-300">567 Following</p>
-        </section>
-        <section>
-          <h2 class="text-xl font-semibold text-white">Recent Tweets</h2>
-          <div class="space-y-4 mt-2">
-            <div class="bg-gray-800 p-4 rounded-lg">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-            <div class="bg-gray-800 p-4 rounded-lg">
-              <p>
-                Sed do eiusmod tempor incididunt ut labore et dolore magna
-                aliqua.
-              </p>
-            </div>
-            <!-- Add more tweets as needed -->
-          </div>
         </section>
       </div>
     </div>
@@ -77,7 +62,7 @@ export default {
   name: "ProfilePage",
   data() {
     return {
-      character: "",
+      user: {},
       id: this.$route.params.id,
       showUserName,
     };
@@ -89,7 +74,7 @@ export default {
   },
   apollo: {
     // fetch user by ID
-    character: {
+    user: {
       query: USER_QUERY,
       variables() {
         return {

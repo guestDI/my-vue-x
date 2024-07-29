@@ -39,37 +39,39 @@
       <h3 v-if="loading">Loading...</h3>
       <div v-else class="flex-1 overflow-y-auto space-y-6 mt-4">
         <div
-          v-for="user in users"
-          :key="user.id"
+          v-for="tweet in tweets"
+          :key="tweet.id"
           class="bg-gray-800 p-4 rounded-lg"
         >
           <div class="flex items-center mb-2">
-            <div v-if="user.image" class="bg-gray-600 rounded-full h-10 w-10">
+            <div
+              v-if="tweet.author.image"
+              class="bg-gray-600 rounded-full h-10 w-10"
+            >
               <img
                 class="bg-gray-600 rounded-full h-10 w-10"
-                :src="user.image"
+                :src="tweet.author.image"
               />
             </div>
             <div v-else class="bg-gray-600 rounded-full h-10 w-10">JD</div>
             <div class="ml-2">
               <div class="flex items-center">
-                <p class="text-white font-bold mr-2">{{ user.name }}</p>
+                <p class="text-white font-bold mr-2">{{ tweet.author.name }}</p>
                 <div
                   class="w-2 h-2 rounded-full"
-                  :style="{ backgroundColor: getDotColor(user.status) }"
+                  :style="{ backgroundColor: getDotColor(tweet.author.status) }"
                 ></div>
               </div>
               <p class="text-gray-400 mr-0">
-                <router-link :to="`/profile/users/${Number(user.id)}`">{{
-                  `@${user.username}`
+                <router-link :to="`/profile/users/${tweet.author.id}`">{{
+                  `@${tweet.author.username}`
                 }}</router-link>
               </p>
             </div>
           </div>
 
           <p class="text-left">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec
-            odio. Praesent libero. Sed cursus ante dapibus diam.
+            {{ tweet.text }}
           </p>
         </div>
       </div>
@@ -78,12 +80,13 @@
 </template>
 
 <script>
-import { USERS_QUERY } from "../graphql/queries";
+import { USERS_QUERY, TWEETS_QUERY } from "../graphql/queries";
 import { showUserName } from "../utils";
 
 export default {
   data: () => ({
     users: [],
+    tweets: [],
     loading: 0,
     showUserName,
   }),
@@ -102,6 +105,14 @@ export default {
     users: {
       // GraphQL query
       query: USERS_QUERY,
+      // Will update the 'loading' attribute
+      // +1 when a new query is loading
+      // -1 when a query is completed
+      loadingKey: "loading",
+    },
+    tweets: {
+      // GraphQL query
+      query: TWEETS_QUERY,
       // Will update the 'loading' attribute
       // +1 when a new query is loading
       // -1 when a query is completed
