@@ -24,12 +24,14 @@
       </div>
       <div class="mb-6 sticky top-12 bg-gray-900 py-4">
         <textarea
+          v-model="tweet"
           class="w-full p-2 bg-gray-800 text-white rounded-lg"
           rows="3"
           placeholder="What's happening?"
         ></textarea>
         <div class="flex w-full justify-end mt-2">
           <button
+            @click="addTweet"
             class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded"
           >
             Tweet
@@ -80,15 +82,17 @@
 </template>
 
 <script>
-import { USERS_QUERY, TWEETS_QUERY } from "../graphql/queries";
+import { TWEETS_QUERY } from "../graphql/queries";
+import { ADD_TWEET } from "../graphql/mutations";
 import { showUserName } from "../utils";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   data: () => ({
-    users: [],
     tweets: [],
     loading: 0,
     showUserName,
+    tweet: "",
   }),
   methods: {
     getDotColor(status = "") {
@@ -99,23 +103,27 @@ export default {
       }
       return "gray";
     },
+    addTweet() {
+      // Mutation
+      this.$apollo
+        .mutate({
+          mutation: ADD_TWEET,
+          variables: {
+            id: uuidv4(),
+            authorId: "60959239-a936-481b-9b6c-cc8f49aa3cd5",
+            text: this.tweet,
+          },
+        })
+        .then((data) => {
+          console.log("Done.", data);
+        });
+    },
   },
   // Apollo GraphQL
   apollo: {
-    users: {
-      // GraphQL query
-      query: USERS_QUERY,
-      // Will update the 'loading' attribute
-      // +1 when a new query is loading
-      // -1 when a query is completed
-      loadingKey: "loading",
-    },
     tweets: {
       // GraphQL query
       query: TWEETS_QUERY,
-      // Will update the 'loading' attribute
-      // +1 when a new query is loading
-      // -1 when a query is completed
       loadingKey: "loading",
     },
   },

@@ -7,16 +7,16 @@ import db from "../db.js";
 export const schema = makeExecutableSchema({
   typeDefs: /* GraphQL */ `
     type Query {
-      users: [User!]!
-      tweets: [Tweet]!
-      user(id: ID!): User!
+      authors: [Author!]!
+      tweets: [Tweet!]!
+      author(id: ID!): Author!
     }
 
     type Mutation {
-      addTweet(data: CreateTweetInput!): Tweet
+      addTweet(data: CreateTweetInput!): Tweet!
     }
 
-    type User {
+    type Author {
       id: ID!
       name: String!
       username: String!
@@ -26,13 +26,13 @@ export const schema = makeExecutableSchema({
     type Tweet {
       id: ID!
       text: String!
-      author: User!
+      author: Author!
     }
 
     input CreateTweetInput {
       id: ID!
       text: String!
-      author: ID!
+      authorId: ID!
     }
   `,
   resolvers: resolvers,

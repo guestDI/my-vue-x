@@ -1,18 +1,16 @@
-import { v4 as uuidv4 } from "uuid";
-
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
   // Define resolvers for queries
   Query: {
     // Return all users // rename to authors
-    users(_, args, { db }) {
+    authors(_, args, { db }) {
       return db.authors;
     },
     // Return all tweets
     tweets(_, args, { db }) {
       return db.tweets;
     },
-    user: (_, args, { db }) => db.authors.find((user) => user.id === args.id),
+    author: (_, args, { db }) => db.authors.find((user) => user.id === args.id),
   },
   Tweet: {
     author(parent, _, { db }) {
@@ -20,11 +18,12 @@ const resolvers = {
     },
   },
   Mutation: {
-    addTweet(_, args, context) {
+    addTweet(_, args, { db }) {
       const tweet = {
-        id: uuidv4(),
         ...args.data,
       };
+
+      db.tweets.push(tweet);
 
       return tweet;
     },

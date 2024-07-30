@@ -1,3 +1,10 @@
+const currentUser = {
+  id: "60959239-a936-481b-9b6c-cc8f49aa3cd5",
+  name: "Chris Evans",
+  username: "steverodgers",
+  image: "https://rickandmortyapi.com/api/character/avatar/4.jpeg",
+};
+
 const authors = [
   {
     id: "ffc8e891-719e-4d9e-a034-8b6468c6c173",
@@ -17,6 +24,7 @@ const authors = [
     username: "hmurakami",
     image: "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
   },
+  currentUser,
 ];
 
 const tweets = [
@@ -60,6 +68,7 @@ const tweets = [
 const db = {
   authors,
   tweets,
+  currentUser,
 };
 
 export default db;
