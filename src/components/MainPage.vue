@@ -113,6 +113,14 @@ export default {
             authorId: "60959239-a936-481b-9b6c-cc8f49aa3cd5",
             text: this.tweet,
           },
+          update: (cache, { data: { addTweet } }) => {
+            let data = cache.readQuery({ query: TWEETS_QUERY });
+            data = {
+              ...data,
+              tweets: [...data.tweets, addTweet],
+            };
+            cache.writeQuery({ query: TWEETS_QUERY, data });
+          },
         })
         .then((data) => {
           console.log("Done.", data);

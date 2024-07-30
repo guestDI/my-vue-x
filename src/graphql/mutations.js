@@ -5,10 +5,12 @@ export const ADD_TWEET = gql`
     addTweet(data: { id: $id, text: $text, authorId: $authorId }) {
       id
       text
-      #   author {
-      #     id
-      #     name
-      #   }
+      author {
+        id
+        name
+        image
+        username
+      }
     }
   }
 `;
