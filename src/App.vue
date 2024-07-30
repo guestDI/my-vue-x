@@ -1,7 +1,38 @@
 <script setup></script>
 
 <template>
-  <router-view />
+  <div class="h-screen bg-gray-900 text-gray-300 flex">
+    <div class="w-2/6 p-4 h-full overflow-y-auto">
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-white">Profile</h2>
+        <router-link to="/profile" class="mt-2 text-blue-400"
+          >@johndoe</router-link
+        >
+      </div>
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-white">Menu</h2>
+        <ul class="mt-2 space-y-2">
+          <li>
+            <router-link to="/" class="text-blue-400">Home</router-link>
+          </li>
+          <li>
+            <router-link to="/explore" class="text-blue-400"
+              >Explore</router-link
+            >
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-white">Trends</h2>
+        <ul class="mt-2 space-y-2">
+          <li>#VueJS</li>
+          <li>#TailwindCSS</li>
+          <li>#JavaScript</li>
+        </ul>
+      </div>
+    </div>
+    <router-view />
+  </div>
 </template>
 
 <style scoped>
