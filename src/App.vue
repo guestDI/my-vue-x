@@ -2,27 +2,25 @@
 
 <template>
   <div class="h-screen bg-gray-900 text-gray-300 flex">
-    <div class="w-2/6 p-4 h-full overflow-y-auto">
-      <div class="mb-8">
+    <div
+      class="w-2/6 p-4 h-full overflow-y-auto font-medium text-lg ml-14 mt-12"
+    >
+      <div class="mb-8 text-left">
         <h2 class="text-2xl font-bold text-white">Profile</h2>
         <router-link to="/profile" class="mt-2 text-blue-400"
           >@johndoe</router-link
         >
       </div>
-      <div class="mb-8">
+      <div class="mb-8 text-left flex flex-col">
         <h2 class="text-2xl font-bold text-white">Menu</h2>
-        <ul class="mt-2 space-y-2">
-          <li>
-            <router-link to="/" class="text-blue-400">Home</router-link>
-          </li>
-          <li>
-            <router-link to="/explore" class="text-blue-400"
-              >Explore</router-link
-            >
-          </li>
-        </ul>
+        <button class="bg-gray-900 pl-0 text-left">
+          <router-link to="/" class="text-blue-400">Home</router-link>
+        </button>
+        <button class="bg-gray-900 pl-0 text-left">
+          <router-link to="/explore" class="text-blue-400">Explore</router-link>
+        </button>
       </div>
-      <div>
+      <div class="text-left">
         <h2 class="text-2xl font-bold text-white">Trends</h2>
         <ul class="mt-2 space-y-2">
           <li>#VueJS</li>

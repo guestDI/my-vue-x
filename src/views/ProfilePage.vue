@@ -10,8 +10,8 @@
       >
         <div class="flex items-center space-x-4">
           <img
-            v-if="user.image"
-            :src="user.image"
+            v-if="author.image"
+            :src="author.image"
             alt="Profile"
             class="w-24 h-24 rounded-full border-4 border-gray-800"
           />
@@ -22,8 +22,8 @@
             class="w-24 h-24 rounded-full border-4 border-gray-800"
           />
           <div>
-            <h1 class="text-3xl font-bold text-white">{{ user.name }}</h1>
-            <p class="text-gray-400">@{{ user.username }}</p>
+            <h1 class="text-3xl font-bold text-white">{{ author.name }}</h1>
+            <p class="text-gray-400">@{{ author.username }}</p>
           </div>
         </div>
         <button
@@ -55,14 +55,14 @@
 </template>
 
 <script>
-import { USER_QUERY } from "../graphql/queries";
+import { AUTHOR_QUERY } from "../graphql/queries";
 import { showUserName } from "../utils";
 
 export default {
   name: "ProfilePage",
   data() {
     return {
-      user: {},
+      author: {},
       id: this.$route.params.id,
       showUserName,
     };
@@ -74,8 +74,8 @@ export default {
   },
   apollo: {
     // fetch user by ID
-    user: {
-      query: USER_QUERY,
+    author: {
+      query: AUTHOR_QUERY,
       variables() {
         return {
           id: this.id,

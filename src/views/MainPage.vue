@@ -40,16 +40,16 @@
           <div v-else class="bg-gray-600 rounded-full h-10 w-10">JD</div>
           <div class="ml-2">
             <div class="flex items-center">
-              <p class="text-white font-bold mr-2">{{ tweet.author.name }}</p>
-              <div
-                class="w-2 h-2 rounded-full"
-                :style="{ backgroundColor: getDotColor(tweet.author.status) }"
-              ></div>
+              <p class="text-primary-400 mr-0">
+                <router-link
+                  class="text-white mr-0"
+                  :to="`/profile/${tweet.author.id}`"
+                  >{{ tweet.author.name }}</router-link
+                >
+              </p>
             </div>
             <p class="text-gray-400 mr-0">
-              <router-link :to="`/profile/users/${tweet.author.id}`">{{
-                `@${tweet.author.username}`
-              }}</router-link>
+              {{ `@${tweet.author.username}` }}
             </p>
           </div>
         </div>
@@ -76,14 +76,6 @@ export default {
     tweet: "",
   }),
   methods: {
-    getDotColor(status = "") {
-      if (status.toLowerCase() === "alive") {
-        return "green";
-      } else if (status.toLowerCase() === "dead") {
-        return "red";
-      }
-      return "gray";
-    },
     addTweet() {
       // Mutation
       this.$apollo

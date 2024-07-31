@@ -26,9 +26,9 @@ export const TWEETS_QUERY = gql`
   }
 `;
 
-export const USER_QUERY = gql`
-  query UserQuery($id: ID!) {
-    user(id: $id) {
+export const AUTHOR_QUERY = gql`
+  query AuthorQuery($id: ID!) {
+    author(id: $id) {
       id
       name
       username

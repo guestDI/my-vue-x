@@ -1,12 +1,12 @@
 import { createWebHistory, createRouter } from "vue-router";
 
-import MainPage from "../components/MainPage.vue";
-import ProfilePage from "../components/ProfilePage.vue";
-import ExplorePage from "../components/ExplorePage.vue";
+import MainPage from "../views/MainPage.vue";
+import ProfilePage from "../views/ProfilePage.vue";
+import ExplorePage from "../views/ExplorePage.vue";
 
 const routes = [
   { path: "/", component: MainPage },
-  { path: "/profile/users/:id", component: ProfilePage, props: true },
+  { path: "/profile/:id", component: ProfilePage, props: true },
   {
     path: "/explore",
     name: "Explore",
