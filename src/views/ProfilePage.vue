@@ -27,7 +27,8 @@
           </div>
         </div>
         <button
-          class="bg-white hover:bg-gray-100 text-primary font-bold py-2 px-4 rounded"
+          v-if="currentUser.id !== id"
+          class="bg-white hover:bg-gray-100 text-gray-600 font-bold py-2 px-4 rounded"
         >
           Follow
         </button>
@@ -60,16 +61,16 @@
 </template>
 
 <script>
-import { AUTHOR_QUERY } from "../graphql/queries";
-import { showUserName } from "../utils";
+import { AUTHOR_QUERY, CURRENT_USER_QUERY } from "../graphql/queries";
 
 export default {
+
   name: "ProfilePage",
   data() {
     return {
       author: {},
       id: this.$route.params.id,
-      showUserName,
+      currentUser: {}
     };
   },
   methods: {
@@ -86,6 +87,10 @@ export default {
           id: this.id,
         };
       },
+    },
+    currentUser: {
+      // GraphQL query
+      query: CURRENT_USER_QUERY,
     },
   },
 };
