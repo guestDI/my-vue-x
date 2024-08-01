@@ -27,6 +27,11 @@
           </div>
         </div>
         <button
+          class="bg-white hover:bg-gray-100 text-primary font-bold py-2 px-4 rounded"
+        >
+          Follow
+        </button>
+        <button
           @click="goBack"
           class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
         >

@@ -1,16 +1,8 @@
-<script setup></script>
-
 <template>
   <div class="h-screen bg-gray-900 text-gray-300 flex">
     <div
       class="w-2/6 p-4 h-full overflow-y-auto font-medium text-lg ml-14 mt-12"
     >
-      <div class="mb-8 text-left">
-        <h2 class="text-2xl font-bold text-white">Profile</h2>
-        <router-link to="/profile" class="mt-2 text-blue-400"
-          >@johndoe</router-link
-        >
-      </div>
       <div class="mb-8 text-left flex flex-col">
         <h2 class="text-2xl font-bold text-white">Menu</h2>
         <button class="bg-gray-900 pl-0 text-left">
@@ -18,6 +10,9 @@
         </button>
         <button class="bg-gray-900 pl-0 text-left">
           <router-link to="/explore" class="text-blue-400">Explore</router-link>
+        </button>
+        <button class="bg-gray-900 pl-0 text-left">
+          <router-link :to="`/profile/${currentUser.id}`" class="text-blue-400">Profile</router-link>
         </button>
       </div>
       <div class="text-left">
@@ -32,6 +27,22 @@
     <router-view />
   </div>
 </template>
+
+<script >
+import { CURRENT_USER_QUERY } from "./graphql/queries.js";
+
+export default {
+  data: () => ({
+    currentUser: {}
+  }),
+  apollo: {
+    currentUser: {
+      // GraphQL query
+      query: CURRENT_USER_QUERY,
+    },
+  },
+}
+</script>
 
 <style scoped>
 .logo {
