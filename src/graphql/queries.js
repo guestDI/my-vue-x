@@ -22,6 +22,8 @@ export const AUTHOR_QUERY = gql`
       name
       username
       image
+      followers
+      following
     }
   }
 `;
@@ -33,6 +35,8 @@ export const CURRENT_USER_QUERY = gql`
             name
             username
             image
+            followers
+            following
         }
     }
 `;

@@ -27,10 +27,11 @@
           </div>
         </div>
         <button
+          @click="follow"
           v-if="currentUser.id !== id"
           class="bg-white hover:bg-gray-100 text-gray-600 font-bold py-2 px-4 rounded"
         >
-          Follow
+          {{getBtnTitle}}
         </button>
         <button
           @click="goBack"
@@ -47,14 +48,14 @@
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
         </section>
-        <section>
-          <h2 class="text-xl font-semibold text-white">Followers</h2>
-          <p class="mt-2 text-gray-300">1234 Followers</p>
-        </section>
-        <section>
-          <h2 class="text-xl font-semibold text-white">Following</h2>
-          <p class="mt-2 text-gray-300">567 Following</p>
-        </section>
+        <div class="flex flex-row">
+          <section class="mr-4">
+            <p class="mt-2 text-sm text-gray-300">{{ author?.followers?.length }} followers</p>
+          </section>
+          <section>
+            <p class="mt-2 text-sm text-gray-300">{{ author?.following?.length }} following</p>
+          </section>
+        </div>
       </div>
     </div>
   </div>
@@ -62,6 +63,7 @@
 
 <script>
 import { AUTHOR_QUERY, CURRENT_USER_QUERY } from "../graphql/queries";
+import { FOLLOW } from "../graphql/mutations.js";
 
 export default {
 
@@ -70,13 +72,43 @@ export default {
     return {
       author: {},
       id: this.$route.params.id,
-      currentUser: {}
+      currentUser: {},
     };
   },
   methods: {
     goBack() {
       this.$router.push("/");
     },
+    follow() {
+      // Mutation
+      this.$apollo
+        .mutate({
+          mutation: FOLLOW,
+          variables: {
+            id: this.currentUser.id
+          },
+          update: (cache, { data: { follow } }) => {
+            let data = cache.readQuery({ query: AUTHOR_QUERY, variables: {id: this.id} });
+            data = {
+              author: {
+                ...data.author,
+                followers: [...data.author.followers, follow],
+              },
+            };
+
+            cache.writeQuery({ query: AUTHOR_QUERY, data });
+          },
+        })
+        .then((data) => {
+          console.log("Done.", data);
+        });
+    },
+  },
+  computed: {
+    getBtnTitle() {
+      console.log(this.author?.followers, this.currentUser.id)
+      return this.author?.followers?.includes(this.currentUser.id) ? 'Unfollow' : 'Follow'
+    }
   },
   apollo: {
     // fetch user by ID

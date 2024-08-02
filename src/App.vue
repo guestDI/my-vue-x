@@ -17,7 +17,7 @@
       </div>
       <div class="text-left">
         <h2 class="text-2xl font-bold text-white">Trends</h2>
-        <ul class="mt-2 space-y-2">
+        <ul class="mt-2 space-y-2 text-sm">
           <li>#VueJS</li>
           <li>#TailwindCSS</li>
           <li>#JavaScript</li>

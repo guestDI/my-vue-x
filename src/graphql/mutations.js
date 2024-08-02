@@ -14,3 +14,9 @@ export const ADD_TWEET = gql`
     }
   }
 `;
+
+export const FOLLOW = gql`
+    mutation addTweet($id: ID!) {
+        follow( id: $id) 
+    }
+`;

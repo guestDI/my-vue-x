@@ -3,6 +3,8 @@ const currentUser = {
   name: "Chris Evans",
   username: "steverodgers",
   image: "https://rickandmortyapi.com/api/character/avatar/4.jpeg",
+  following: [],
+  followers: ["ffc8e891-719e-4d9e-a034-8b6468c6c173"]
 };
 
 const authors = [
@@ -11,18 +13,24 @@ const authors = [
     name: "J.K. Rowling",
     username: "jkrowling",
     image: "https://rickandmortyapi.com/api/character/avatar/3.jpeg",
+    following: [],
+    followers: []
   },
   {
     id: "3d0ebbb1-bc93-406a-9695-d2ebc2638cd4",
     name: "Stephen King",
     username: "sking",
     image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+    following: [],
+    followers: []
   },
   {
     id: "60959239-a936-481b-9b6c-cc8f99aa6cd9",
     name: "Haruki Murakami",
     username: "hmurakami",
     image: "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
+    following: [],
+    followers: []
   },
   currentUser,
 ];

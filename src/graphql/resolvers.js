@@ -28,6 +28,13 @@ const resolvers = {
 
       return tweet;
     },
+    follow(_, args, { db }) {
+      const authorIdx = db.authors.findIndex((author) => author.id === args.id);
+      if (authorIdx > -1 ) {
+        db.authors[authorIdx].followers.push(args.id);
+      }
+      return args.id;
+    }
   },
 };
 
