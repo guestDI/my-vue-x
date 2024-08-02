@@ -57,12 +57,53 @@
           </section>
         </div>
       </div>
+      <div class="p-6 space-y-4 text-left border-t border-gray-700">
+        <div class="flex space-x-4 pb-2">
+          <button
+            @click="setActiveTab('Posts')"
+            :class="
+              activeTab === 'Posts'
+                ? 'border-blue-500 text-white'
+                : 'border-transparent text-gray-400'
+            "
+            class="py-2 px-4 border-b-2 focus:outline-none"
+          >
+            Posts
+          </button>
+          <button
+            @click="setActiveTab('Likes')"
+            :class="
+              activeTab === 'Likes'
+                ? 'border-blue-500 text-white'
+                : 'border-transparent text-gray-400'
+            "
+            class="py-2 px-4 border-b-2 focus:outline-none"
+          >
+            Likes
+          </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-2 space-y-6">
+          <div v-if="activeTab === 'Posts'" class="bg-gray-800 rounded-lg">
+            <div
+              v-for="post in posts"
+              :key="post.id"
+              class="bg-gray-700 p-4 rounded-lg mb-2"
+            >
+              <p>{{ post.text }}</p>
+            </div>
+          </div>
+          <div v-if="activeTab === 'Likes'" class="bg-gray-800 p-4 rounded-lg">
+            <!-- News content -->
+            <p>Likes content goes here...</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { AUTHOR_QUERY, CURRENT_USER_QUERY } from "../graphql/queries";
+import { AUTHOR_QUERY, CURRENT_USER_QUERY, USER_TWEETS_QUERY } from "../graphql/queries";
 import { FOLLOW, UNFOLLOW } from "../graphql/mutations.js";
 
 export default {
@@ -73,14 +114,19 @@ export default {
       author: {},
       id: this.$route.params.id,
       currentUser: {},
+      activeTab: 'Posts',
+      posts: []
     };
   },
   watch: {
-    '$route'(to, from) {
+    '$route'() {
       this.id = this.$route.params.id;
     }
   },
   methods: {
+    setActiveTab(tab) {
+      this.activeTab = tab;
+    },
     goBack() {
       this.$router.push("/");
     },
@@ -148,7 +194,6 @@ export default {
     }
   },
   apollo: {
-    // fetch user by ID
     author: {
       query: AUTHOR_QUERY,
       variables() {
@@ -158,9 +203,17 @@ export default {
       },
     },
     currentUser: {
-      // GraphQL query
       query: CURRENT_USER_QUERY,
     },
+    posts: {
+      query: USER_TWEETS_QUERY,
+      variables() {
+        return {
+          id: this.id,
+        };
+      },
+      debounce: 100
+    }
   },
 };
 </script>

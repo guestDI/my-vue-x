@@ -106,6 +106,7 @@ export default {
       // GraphQL query
       query: TWEETS_QUERY,
       loadingKey: "loading",
+      prefetch: true,
     },
     currentUser: {
       query: CURRENT_USER_QUERY,

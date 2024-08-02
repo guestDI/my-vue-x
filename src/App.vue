@@ -5,13 +5,13 @@
     >
       <div class="mb-8 text-left flex flex-col">
         <h2 class="text-2xl font-bold text-white">Menu</h2>
-        <button @click.prevent="goToHomePage" class="bg-gray-900 pl-0 text-left">
+        <button @click.prevent="goToHomePage" class="bg-gray-900 pl-0 text-left focus:outline-none">
           Home
         </button>
-        <button @click.prevent="goToExplorePage" class="bg-gray-900 pl-0 text-left">
+        <button @click.prevent="goToExplorePage" class="bg-gray-900 pl-0 text-left focus:outline-none">
           Explore
         </button>
-        <button @click.prevent="goToProfilePage" class="bg-gray-900 pl-0 text-left">
+        <button @click.prevent="goToProfilePage" class="bg-gray-900 pl-0 text-left focus:outline-none hover:outline-none">
           Profile
         </button>
       </div>

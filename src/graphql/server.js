@@ -11,6 +11,7 @@ export const schema = makeExecutableSchema({
       tweets: [Tweet!]!
       author(id: ID!): Author!
       currentUser: Author!
+      posts(id: ID!): [Tweet]!  
     }
 
     type Mutation {

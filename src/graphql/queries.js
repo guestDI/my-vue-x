@@ -40,3 +40,12 @@ export const CURRENT_USER_QUERY = gql`
         }
     }
 `;
+
+export const USER_TWEETS_QUERY = gql`
+    query UserTweetsQuery($id: ID!) {
+        posts(id: $id) {
+            id
+            text
+        }
+    }
+`;

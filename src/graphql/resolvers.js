@@ -12,6 +12,9 @@ const resolvers = {
     },
     author: (_, args, { db }) => db.authors.find((user) => user.id === args.id),
     currentUser: (_, args, { db }) => db.currentUser,
+    posts: (_, args, { db }) => {
+      return db.tweets.filter((tweet) => tweet.authorId === args.id);
+    }
   },
   Tweet: {
     author(parent, _, { db }) {
