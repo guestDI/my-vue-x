@@ -5,15 +5,15 @@
     >
       <div class="mb-8 text-left flex flex-col">
         <h2 class="text-2xl font-bold text-white">Menu</h2>
-        <button @click.prevent="goToHomePage" class="bg-gray-900 pl-0 text-left focus:outline-none">
+        <MenuItem @click.prevent="goToHomePage">
           Home
-        </button>
-        <button @click.prevent="goToExplorePage" class="bg-gray-900 pl-0 text-left focus:outline-none">
+        </MenuItem>
+        <MenuItem @click.prevent="goToExplorePage">
           Explore
-        </button>
-        <button @click.prevent="goToProfilePage" class="bg-gray-900 pl-0 text-left focus:outline-none hover:outline-none">
+        </MenuItem>
+        <MenuItem @click.prevent="goToProfilePage">
           Profile
-        </button>
+        </MenuItem>
       </div>
       <div class="text-left">
         <h2 class="text-2xl font-bold text-white">Trends</h2>
@@ -30,8 +30,10 @@
 
 <script >
 import { CURRENT_USER_QUERY } from "./graphql/queries.js";
+import MenuItem from "./components/MenuItem.vue";
 
 export default {
+  components: { MenuItem },
   data: () => ({
     currentUser: {}
   }),

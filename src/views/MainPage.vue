@@ -57,6 +57,12 @@
         <p class="text-left">
           {{ tweet.text }}
         </p>
+        <div class="grid grid-cols-4 gap-3 border-t border-gray-700 mt-4 mb-2">
+          <button>
+            <LikeIcon/>
+          </button>
+          <div>09</div>
+        </div>
       </div>
     </div>
   </div>
@@ -67,8 +73,10 @@ import { CURRENT_USER_QUERY, TWEETS_QUERY } from "../graphql/queries";
 import { ADD_TWEET } from "../graphql/mutations";
 import { showUserName } from "../utils";
 import { v4 as uuidv4 } from "uuid";
+import LikeIcon from "../components/LikeIcon.vue";
 
 export default {
+  components: { LikeIcon },
   data: () => ({
     tweets: [],
     loading: 0,

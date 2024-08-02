@@ -72,6 +72,7 @@
           </button>
           <button
             @click="setActiveTab('Likes')"
+            v-if="currentUser.id === id"
             :class="
               activeTab === 'Likes'
                 ? 'border-blue-500 text-white'
@@ -85,16 +86,15 @@
         <div class="flex-1 overflow-y-auto p-2 space-y-6">
           <div v-if="activeTab === 'Posts'" class="bg-gray-800 rounded-lg">
             <div
-              v-for="post in posts"
-              :key="post.id"
+              v-for="tweet in author.tweets"
+              :key="tweet.id"
               class="bg-gray-700 p-4 rounded-lg mb-2"
             >
-              <p>{{ post.text }}</p>
+              <p>{{ tweet.text }}</p>
             </div>
           </div>
           <div v-if="activeTab === 'Likes'" class="bg-gray-800 p-4 rounded-lg">
-            <!-- News content -->
-            <p>Likes content goes here...</p>
+            <p>You didn't like anything so far...</p>
           </div>
         </div>
       </div>
@@ -205,15 +205,6 @@ export default {
     currentUser: {
       query: CURRENT_USER_QUERY,
     },
-    posts: {
-      query: USER_TWEETS_QUERY,
-      variables() {
-        return {
-          id: this.id,
-        };
-      },
-      debounce: 100
-    }
   },
 };
 </script>

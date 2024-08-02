@@ -27,6 +27,7 @@ export const schema = makeExecutableSchema({
       image: String
       following: [String]!
       followers: [String]!
+      tweets: [Tweet]!
     }
 
     type Tweet {

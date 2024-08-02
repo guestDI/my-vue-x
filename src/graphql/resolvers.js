@@ -10,7 +10,15 @@ const resolvers = {
     tweets(_, args, { db }) {
       return db.tweets;
     },
-    author: (_, args, { db }) => db.authors.find((user) => user.id === args.id),
+    author: (_, args, { db }) => {
+      const author = db.authors.find((author) => author.id === args.id)
+      const tweetsByAuthor = db.tweets.filter((tweet) => tweet.authorId === args.id);
+
+      return {
+        ...author,
+        tweets: tweetsByAuthor
+      };
+    },
     currentUser: (_, args, { db }) => db.currentUser,
     posts: (_, args, { db }) => {
       return db.tweets.filter((tweet) => tweet.authorId === args.id);
