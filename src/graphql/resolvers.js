@@ -30,15 +30,20 @@ const resolvers = {
     },
     follow(_, args, { db }) {
       const authorIdx = db.authors.findIndex((author) => author.id === args.authorId);
+      //find user how start follow
+      const userIdx = db.authors.findIndex((author) => author.id === args.id);
       if (authorIdx > -1 ) {
         db.authors[authorIdx].followers.push(args.id);
+        db.authors[userIdx].following.push(args.authorId);
       }
+
       return args.id;
     },
     unfollow(_, args, { db }) {
       const authorIdx = db.authors.findIndex((author) => author.id === args.authorId);
       if (authorIdx > -1 ) {
         db.authors[authorIdx].followers.splice(args.id, 1)
+        // db.currentUser.following = db.currentUser.following.filter((user) => user !== args.authorId)
       }
       return args.id;
     }

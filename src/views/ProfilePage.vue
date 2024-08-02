@@ -75,6 +75,11 @@ export default {
       currentUser: {},
     };
   },
+  watch: {
+    '$route'(to, from) {
+      this.id = this.$route.params.id;
+    }
+  },
   methods: {
     goBack() {
       this.$router.push("/");

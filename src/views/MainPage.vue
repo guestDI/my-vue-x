@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { TWEETS_QUERY } from "../graphql/queries";
+import { CURRENT_USER_QUERY, TWEETS_QUERY } from "../graphql/queries";
 import { ADD_TWEET } from "../graphql/mutations";
 import { showUserName } from "../utils";
 import { v4 as uuidv4 } from "uuid";
@@ -72,8 +72,8 @@ export default {
   data: () => ({
     tweets: [],
     loading: 0,
-    showUserName,
     tweet: "",
+    currentUser: {}
   }),
   methods: {
     addTweet() {
@@ -83,7 +83,7 @@ export default {
           mutation: ADD_TWEET,
           variables: {
             id: uuidv4(),
-            authorId: "60959239-a936-481b-9b6c-cc8f49aa3cd5",
+            authorId: this.currentUser.id,
             text: this.tweet,
           },
           update: (cache, { data: { addTweet } }) => {
@@ -106,6 +106,9 @@ export default {
       // GraphQL query
       query: TWEETS_QUERY,
       loadingKey: "loading",
+    },
+    currentUser: {
+      query: CURRENT_USER_QUERY,
     },
   },
 };
