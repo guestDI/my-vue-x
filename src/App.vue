@@ -5,14 +5,14 @@
     >
       <div class="mb-8 text-left flex flex-col">
         <h2 class="text-2xl font-bold text-white">Menu</h2>
-        <button class="bg-gray-900 pl-0 text-left">
-          <router-link to="/" class="text-blue-400">Home</router-link>
+        <button @click.prevent="goToHomePage" class="bg-gray-900 pl-0 text-left">
+          Home
         </button>
-        <button class="bg-gray-900 pl-0 text-left">
-          <router-link to="/explore" class="text-blue-400">Explore</router-link>
+        <button @click.prevent="goToExplorePage" class="bg-gray-900 pl-0 text-left">
+          Explore
         </button>
-        <button class="bg-gray-900 pl-0 text-left">
-          <router-link :to="`/profile/${currentUser.id}`" class="text-blue-400">Profile</router-link>
+        <button @click.prevent="goToProfilePage" class="bg-gray-900 pl-0 text-left">
+          Profile
         </button>
       </div>
       <div class="text-left">
@@ -35,6 +35,17 @@ export default {
   data: () => ({
     currentUser: {}
   }),
+  methods: {
+    goToProfilePage() {
+      this.$router.push({ path: `/profile/${this.currentUser.id}` })
+    },
+    goToExplorePage() {
+      this.$router.push({ path: "/explore" })
+    },
+    goToHomePage() {
+      this.$router.push({ path: "/" })
+    }
+  },
   apollo: {
     currentUser: {
       // GraphQL query
@@ -45,16 +56,4 @@ export default {
 </script>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
 </style>

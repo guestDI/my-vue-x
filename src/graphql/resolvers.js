@@ -29,9 +29,16 @@ const resolvers = {
       return tweet;
     },
     follow(_, args, { db }) {
-      const authorIdx = db.authors.findIndex((author) => author.id === args.id);
+      const authorIdx = db.authors.findIndex((author) => author.id === args.authorId);
       if (authorIdx > -1 ) {
         db.authors[authorIdx].followers.push(args.id);
+      }
+      return args.id;
+    },
+    unfollow(_, args, { db }) {
+      const authorIdx = db.authors.findIndex((author) => author.id === args.authorId);
+      if (authorIdx > -1 ) {
+        db.authors[authorIdx].followers.splice(args.id, 1)
       }
       return args.id;
     }

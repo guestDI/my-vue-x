@@ -16,7 +16,13 @@ export const ADD_TWEET = gql`
 `;
 
 export const FOLLOW = gql`
-    mutation addTweet($id: ID!) {
-        follow( id: $id) 
+    mutation follow($authorId: ID!, $id: ID!) {
+        follow(authorId: $authorId, id: $id) 
+    }
+`;
+
+export const UNFOLLOW = gql`
+    mutation unfollow($authorId: ID!, $id: ID!) {
+        unfollow(authorId: $authorId, id: $id)
     }
 `;

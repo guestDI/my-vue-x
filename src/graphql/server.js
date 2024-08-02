@@ -15,7 +15,8 @@ export const schema = makeExecutableSchema({
 
     type Mutation {
       addTweet(data: CreateTweetInput!): Tweet!
-      follow(id: ID!): String! 
+      follow(authorId: ID!, id: ID!): String!
+      unfollow(authorId: ID!, id: ID!): String!
     }
 
     type Author {
