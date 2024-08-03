@@ -12,11 +12,9 @@ const resolvers = {
     },
     author: (_, args, { db }) => {
       const author = db.authors.find((author) => author.id === args.id)
-      const tweetsByAuthor = db.tweets.filter((tweet) => tweet.authorId === args.id);
 
       return {
         ...author,
-        tweets: tweetsByAuthor
       };
     },
     currentUser: (_, args, { db }) => db.currentUser,
@@ -28,6 +26,11 @@ const resolvers = {
     author(parent, _, { db }) {
       return db.authors.find((user) => user.id === parent.authorId);
     },
+  },
+  Author: {
+    tweets: (parent, _, { db }) => {
+      return db.tweets.filter((tweet) => tweet.authorId === parent.id);
+    }
   },
   Mutation: {
     addTweet(_, args, { db }) {

@@ -57,7 +57,7 @@
         <p class="text-left">
           {{ tweet.text }}
         </p>
-        <div class="grid grid-cols-4 gap-4 place-items-center border-t border-gray-700 pt-1 px-4">
+        <div class="grid grid-cols-4 gap-4 place-items-center border-t border-gray-700 pt-1 mt-4 px-4">
           <IconButton>
             <LikeIconOutlined/>
           </IconButton>
