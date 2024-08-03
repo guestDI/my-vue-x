@@ -57,11 +57,19 @@
         <p class="text-left">
           {{ tweet.text }}
         </p>
-        <div class="grid grid-cols-4 gap-3 border-t border-gray-700 mt-4 mb-2">
-          <button>
-            <LikeIcon/>
-          </button>
-          <div>09</div>
+        <div class="grid grid-cols-4 gap-4 place-items-center border-t border-gray-700 pt-1 px-4">
+          <IconButton>
+            <LikeIconOutlined/>
+          </IconButton>
+          <IconButton>
+            <RepostIcon/>
+          </IconButton>
+          <IconButton>
+            <CommentsIconOutlined/>
+          </IconButton>
+          <IconButton>
+            <ShareIcon/>
+          </IconButton>
         </div>
       </div>
     </div>
@@ -71,12 +79,15 @@
 <script>
 import { CURRENT_USER_QUERY, TWEETS_QUERY } from "../graphql/queries";
 import { ADD_TWEET } from "../graphql/mutations";
-import { showUserName } from "../utils";
 import { v4 as uuidv4 } from "uuid";
-import LikeIcon from "../components/LikeIcon.vue";
+import LikeIconOutlined from "../components/LikeIconOutlined.vue";
+import CommentsIconOutlined from "../components/CommentsIconOutlined.vue";
+import ShareIcon from "../components/ShareIcon.vue";
+import RepostIcon from "../components/RepostIcon.vue";
+import IconButton from "../components/IconButton.vue";
 
 export default {
-  components: { LikeIcon },
+  components: { IconButton, RepostIcon, ShareIcon, CommentsIconOutlined, LikeIconOutlined,  },
   data: () => ({
     tweets: [],
     loading: 0,
