@@ -23,32 +23,35 @@ export default {
         </button>
       </header>
 
-      <section class="relative px-6 min-w-600 max-h-90vh max-w-70vw">
-        <div
-          v-if="tweet?.author?.image"
-          class="bg-gray-600 rounded-full h-10 w-10"
-        >
-          <img
-            alt="image"
-            class="bg-gray-600 rounded-full h-10 w-10"
-            :src="tweet?.author?.image"
-          />
-        </div>
-        <div class="flex">
-          <span class="font-bold mr-2">{{this.tweet?.author?.name}}</span>
-          <span class="text-gray-500">@{{this.tweet?.author?.username}}</span>
-
-        </div>
-        <div class="pb-4 flex text-left flex-col">
-          <p class="pb-3">{{this.tweet?.text}}</p>
-          <span>Replying to {{ this.tweet?.author?.username }}</span>
+      <section class="relative px-6 min-w-600 max-h-90vh max-w-70vw flex">
+        <div class="w-20">
+          <div
+            v-if="tweet?.author?.image"
+            class="bg-gray-600 rounded-full w-12 h-12"
+          >
+            <img
+              alt="image"
+              class="bg-gray-600 rounded-full"
+              :src="tweet?.author?.image"
+            />
+          </div>
         </div>
         <div>
-          <textarea
-            class="w-full p-2 bg-gray-800 text-white rounded-lg"
-            rows="3"
-            placeholder="Post you reply"
-          ></textarea>
+          <div class="flex">
+            <span class="font-bold mr-2">{{this.tweet?.author?.name}}</span>
+            <span class="text-gray-500">@{{this.tweet?.author?.username}}</span>
+          </div>
+          <div class="pb-4 flex text-left flex-col">
+            <p class="pb-3">{{this.tweet?.text}}</p>
+            <span>Replying to {{ this.tweet?.author?.username }}</span>
+          </div>
+          <div>
+            <textarea
+              class="w-full p-2 bg-gray-800 text-white rounded-lg"
+              rows="3"
+              placeholder="Post you reply"
+            ></textarea>
+          </div>
         </div>
       </section>
 
@@ -84,6 +87,7 @@ export default {
   border: none;
   font-size: 20px;
   padding: 10px;
+  width: 45px;
   cursor: pointer;
   font-weight: bold;
   background: transparent;
