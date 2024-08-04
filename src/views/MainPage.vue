@@ -14,7 +14,7 @@
       <div class="flex w-full justify-end mt-2">
         <button
           @click="addTweet"
-          class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded"
+          class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full"
         >
           Tweet
         </button>
@@ -23,7 +23,7 @@
     <h3 v-if="loading">Loading...</h3>
     <div v-else class="flex-1 overflow-y-auto space-y-6 mt-4">
       <div
-        v-for="tweet in tweets"
+        v-for="(tweet, index) in tweets"
         :key="tweet.id"
         class="bg-gray-800 p-4 rounded-lg"
       >
@@ -33,6 +33,7 @@
             class="bg-gray-600 rounded-full h-10 w-10"
           >
             <img
+              alt="image"
               class="bg-gray-600 rounded-full h-10 w-10"
               :src="tweet.author.image"
             />
@@ -64,7 +65,7 @@
           <IconButton>
             <RepostIcon/>
           </IconButton>
-          <IconButton>
+          <IconButton @click="addComment(index)">
             <CommentsIconOutlined/>
           </IconButton>
           <IconButton>
@@ -72,6 +73,12 @@
           </IconButton>
         </div>
       </div>
+
+      <Modal
+        v-show="isModalVisible"
+        @close="closeModal"
+        :tweet="tweets[selectedTweet]"
+      />
     </div>
   </div>
 </template>
@@ -85,16 +92,29 @@ import CommentsIconOutlined from "../components/CommentsIconOutlined.vue";
 import ShareIcon from "../components/ShareIcon.vue";
 import RepostIcon from "../components/RepostIcon.vue";
 import IconButton from "../components/IconButton.vue";
+import Modal from "../components/Modal.vue";
 
 export default {
-  components: { IconButton, RepostIcon, ShareIcon, CommentsIconOutlined, LikeIconOutlined,  },
+  components: { IconButton, RepostIcon, ShareIcon, CommentsIconOutlined, LikeIconOutlined, Modal },
   data: () => ({
     tweets: [],
     loading: 0,
     tweet: "",
-    currentUser: {}
+    currentUser: {},
+    isModalVisible: false,
+    selectedTweet: null
   }),
   methods: {
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+    addComment(tweetId){
+      this.isModalVisible = true;
+      this.selectedTweet = tweetId;
+    },
     addTweet() {
       // Mutation
       this.$apollo
