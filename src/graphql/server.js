@@ -13,13 +13,15 @@ export const schema = makeExecutableSchema({
       authors: [Author!]!
       tweets: [Tweet!]!
       author(id: ID!): Author!
-      posts(id: ID!): [Tweet]!  
+      posts(id: ID!): [Tweet]!
     }
 
     type Mutation {
       addTweet(data: CreateTweetInput!): Tweet!
       follow(authorId: ID!, id: ID!): String!
       unfollow(authorId: ID!, id: ID!): String!
+      signUp(data: AuthPayload!): Author!
+      signIn(username: String!): Author
     }
 
     type Author {
@@ -43,6 +45,11 @@ export const schema = makeExecutableSchema({
       id: ID!
       text: String!
       authorId: ID!
+    }
+    
+    input AuthPayload {
+      username: String!
+      name: String!
     }
   `,
   resolvers: resolvers,

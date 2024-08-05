@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
   // Define resolvers for queries
@@ -78,8 +80,29 @@ const resolvers = {
         // db.currentUser.following = db.currentUser.following.filter((user) => user !== args.authorId)
       }
       return args.id;
+    },
+    async signUp(_, { name, username }, { prisma }) {
+      const recordId = uuidv4();
+
+      return prisma.author.create({
+        data: {
+          name,
+          username,
+          recordId,
+        }
+      })
+    },
+    async signIn(_, { username }, { prisma }) {
+      const author = await prisma.author.findFirst({
+        where: {
+          username: username,
+        },
+      })
+      return !!author ? author : null;
     }
   },
 };
+
+
 
 export default resolvers;

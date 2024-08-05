@@ -6,7 +6,7 @@ export const ADD_TWEET = gql`
       id
       text
       author {
-        id
+        recordId
         name
         image
         username
@@ -26,3 +26,4 @@ export const UNFOLLOW = gql`
         unfollow(authorId: $authorId, id: $id)
     }
 `;
+
