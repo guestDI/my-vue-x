@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { CURRENT_USER_QUERY, TWEETS_QUERY } from "../graphql/queries";
+import { TWEETS_QUERY } from "../graphql/queries";
 import { ADD_TWEET } from "../graphql/mutations";
 import { v4 as uuidv4 } from "uuid";
 import LikeIconOutlined from "../components/LikeIconOutlined.vue";
@@ -100,7 +100,7 @@ export default {
     tweets: [],
     loading: 0,
     tweet: "",
-    currentUser: {},
+    currentUserId: '60959239-a936-481b-9b6c-cc8f49aa3cd5',
     isModalVisible: false,
     selectedTweet: null
   }),
@@ -119,7 +119,7 @@ export default {
           mutation: ADD_TWEET,
           variables: {
             id: uuidv4(),
-            authorId: this.currentUser.id,
+            authorId: this.currentUserId,
             text: this.tweet,
           },
           update: (cache, { data: { addTweet } }) => {
@@ -143,9 +143,6 @@ export default {
       query: TWEETS_QUERY,
       loadingKey: "loading",
       prefetch: true,
-    },
-    currentUser: {
-      query: CURRENT_USER_QUERY,
     },
   },
 };

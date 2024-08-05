@@ -27,24 +27,3 @@ export const AUTHOR_QUERY = gql`
     }
   }
 `;
-
-export const CURRENT_USER_QUERY = gql`
-    query CurrentUserQuery {
-        currentUser{
-            name
-            username
-            image
-            followers
-            following
-        }
-    }
-`;
-
-export const USER_TWEETS_QUERY = gql`
-    query UserTweetsQuery($id: ID!) {
-        posts(id: $id) {
-            id
-            text
-        }
-    }
-`;

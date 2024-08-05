@@ -13,7 +13,6 @@ export const schema = makeExecutableSchema({
       authors: [Author!]!
       tweets: [Tweet!]!
       author(id: ID!): Author!
-      currentUser: Author!
       posts(id: ID!): [Tweet]!  
     }
 

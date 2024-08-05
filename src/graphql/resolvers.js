@@ -19,16 +19,12 @@ const resolvers = {
       });
     },
     async author(_, args, { prisma }) {
-      const author = await prisma.author.findUnique({
+      return await prisma.author.findUnique({
         where: {
           recordId: args.id,
         },
       })
-
-      console.log(author)
-      return author
     },
-    currentUser: (_, args, { db }) => db.currentUser,
     posts: (_, args, { db }) => {
       return db.tweets.filter((tweet) => tweet.authorId === args.id);
     }
@@ -43,8 +39,15 @@ const resolvers = {
     },
   },
   Author: {
-    tweets: (parent, _, { db }) => {
-      return db.tweets.filter((tweet) => tweet.authorId === parent.id);
+    async tweets(parent, _, { prisma }) {
+      return prisma.tweet.findMany({
+        where: {
+          authorId: parent.recordId
+        },
+        orderBy: [{
+          createdAt: "desc"
+        }]
+      })
     }
   },
   Mutation: {

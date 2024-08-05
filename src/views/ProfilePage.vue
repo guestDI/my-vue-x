@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { AUTHOR_QUERY, CURRENT_USER_QUERY, USER_TWEETS_QUERY } from "../graphql/queries";
+import { AUTHOR_QUERY} from "../graphql/queries";
 import { FOLLOW, UNFOLLOW } from "../graphql/mutations.js";
 
 export default {
@@ -144,7 +144,7 @@ export default {
           mutation: FOLLOW,
           variables: {
             authorId: this.id,
-            id: this.currentUser.id,
+            id: this.currentUserId,
           },
           update: (cache, { data: { follow } }) => {
             let data = cache.readQuery({ query: AUTHOR_QUERY, variables: { id: this.id} });
@@ -169,7 +169,7 @@ export default {
           mutation: UNFOLLOW,
           variables: {
             authorId: this.id,
-            id: this.currentUser.id,
+            id: this.currentUserId,
           },
           update: (cache, { data: { unfollow } }) => {
             let data = cache.readQuery({ query: AUTHOR_QUERY, variables: { id: this.id} });
@@ -201,9 +201,6 @@ export default {
           id: this.id,
         };
       },
-    },
-    currentUser: {
-      query: CURRENT_USER_QUERY,
     },
   },
 };

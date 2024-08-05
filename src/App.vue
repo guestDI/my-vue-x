@@ -29,14 +29,11 @@
 </template>
 
 <script >
-import { CURRENT_USER_QUERY } from "./graphql/queries.js";
 import MenuItem from "./components/MenuItem.vue";
 
 export default {
   components: { MenuItem },
-  data: () => ({
-    currentUser: {}
-  }),
+  data: () => ({}),
   methods: {
     goToProfilePage() {
       this.$router.push({ path: "/profile/60959239-a936-481b-9b6c-cc8f49aa3cd5"})
@@ -47,13 +44,7 @@ export default {
     goToHomePage() {
       this.$router.push({ path: "/" })
     }
-  },
-  apollo: {
-    currentUser: {
-      // GraphQL query
-      query: CURRENT_USER_QUERY,
-    },
-  },
+  }
 }
 </script>
 
