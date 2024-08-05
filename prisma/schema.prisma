@@ -21,13 +21,15 @@ model Author {
   image String @default("")
   followers String[]
   following String[]
+  liked String[]
   tweets Tweet[]
 }
 
 model Tweet {
   id Int @id @default(autoincrement())
-  tweetId String
+  tweetId String @unique
   text String
+  likes Int @default(0)
   createdAt DateTime @default(now())
   authorId String
   author Author @relation(fields: [authorId], references: [recordId])

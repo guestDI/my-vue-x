@@ -98,13 +98,83 @@ const resolvers = {
 
       return !!res?.length;
     },
-    unfollow(_, args, { db }) {
-      const authorIdx = db.authors.findIndex((author) => author.id === args.authorId);
-      if (authorIdx > -1 ) {
-        db.authors[authorIdx].followers.splice(args.id, 1)
-        // db.currentUser.following = db.currentUser.following.filter((user) => user !== args.authorId)
-      }
-      return args.id;
+    async unfollow(_, { authorId, id }, { db, prisma }) {
+      const authorObj = await prisma.author.findUnique({
+        where: {
+          recordId: authorId,
+        },
+      });
+
+      const followerObj = await prisma.author.findUnique({
+        where: {
+          recordId: id,
+        },
+      });
+
+      const updatedFollowers = authorObj.followers.filter((follower) => follower !== id);
+      const updatedFollowing = followerObj.following.filter((following) => following !== authorId);
+
+      const res = await prisma.$transaction(
+        [
+          prisma.author.update({
+            where: {
+              recordId: authorId,
+            },
+            data: {
+              followers: updatedFollowers,
+            },
+          }),
+          prisma.author.update({
+            where: {
+              recordId: id,
+            },
+            data: {
+              following: updatedFollowing,
+            },
+          })
+        ]
+      )
+
+      return !!res?.length;
+
+    },
+    async like(_, { tweetId, userId }, { prisma }) {
+      const tweetObj = await prisma.tweet.findUnique({
+        where: {
+          tweetId: tweetId,
+        },
+      })
+
+      const likes = tweetObj.likes + 1;
+
+      const userObj = await prisma.author.findUnique({
+        where: {
+          recordId: userId,
+        },
+      })
+
+      await prisma.$transaction(
+        [
+          prisma.tweet.update({
+            where: {
+              tweetId: tweetId,
+            },
+            data: {
+              likes: likes,
+            },
+          }),
+          prisma.author.update({
+            where: {
+              recordId: userId,
+            },
+            data: {
+              liked: [...userObj.liked, tweetId],
+            },
+          })
+        ]
+      )
+
+      return likes;
     },
     async signUp(_, { name, username }, { prisma }) {
       const recordId = uuidv4();
@@ -127,7 +197,5 @@ const resolvers = {
     }
   },
 };
-
-
 
 export default resolvers;

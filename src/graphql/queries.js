@@ -24,6 +24,10 @@ export const AUTHOR_QUERY = gql`
       image
       followers
       following
+      tweets {
+        text
+        tweetId
+      }  
     }
   }
 `;

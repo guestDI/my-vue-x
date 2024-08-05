@@ -87,7 +87,7 @@
           <div v-if="activeTab === 'Posts'" class="bg-gray-800 rounded-lg">
             <div
               v-for="tweet in author.tweets"
-              :key="tweet.id"
+              :key="tweet.tweetId"
               class="bg-gray-700 p-4 rounded-lg mb-2"
             >
               <p>{{ tweet.text }}</p>

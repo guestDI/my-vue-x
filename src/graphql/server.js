@@ -19,9 +19,11 @@ export const schema = makeExecutableSchema({
     type Mutation {
       addTweet(data: CreateTweetInput!): Tweet!
       follow(authorId: ID!, id: ID!): Boolean!
-      unfollow(authorId: ID!, id: ID!): String!
+      unfollow(authorId: ID!, id: ID!): Boolean!
       signUp(data: AuthPayload!): Author!
       signIn(username: String!): Author
+      like(tweetId: ID!, userId: ID!): Int!
+#      unlike(tweetId: ID!, userId: ID!): Int!
     }
 
     type Author {
@@ -38,6 +40,7 @@ export const schema = makeExecutableSchema({
       id: ID!
       tweetId: String!
       text: String!
+      likes: Int!  
       author: Author!
     }
 
