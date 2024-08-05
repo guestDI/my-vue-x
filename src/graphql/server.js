@@ -3,6 +3,9 @@ import { createYoga } from "graphql-yoga";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import resolvers from "./resolvers.js";
 import db from "../db.js";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export const schema = makeExecutableSchema({
   typeDefs: /* GraphQL */ `
@@ -45,7 +48,7 @@ export const schema = makeExecutableSchema({
   resolvers: resolvers,
 });
 
-const yoga = createYoga({ schema, context: { db } });
+const yoga = createYoga({ schema, context: { db, prisma } });
 const server = createServer(yoga);
 
 // Start the server and you're done!
