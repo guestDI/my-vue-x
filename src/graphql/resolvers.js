@@ -18,12 +18,15 @@ const resolvers = {
         }]
       });
     },
-    author: (_, args, { db }) => {
-      const author = db.authors.find((author) => author.id === args.id)
+    async author(_, args, { prisma }) {
+      const author = await prisma.author.findUnique({
+        where: {
+          recordId: args.id,
+        },
+      })
 
-      return {
-        ...author,
-      };
+      console.log(author)
+      return author
     },
     currentUser: (_, args, { db }) => db.currentUser,
     posts: (_, args, { db }) => {

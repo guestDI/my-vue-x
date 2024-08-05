@@ -24,7 +24,7 @@ export const schema = makeExecutableSchema({
     }
 
     type Author {
-      recordId: String!  
+      recordId: ID!  
       name: String!
       username: String!
       image: String

@@ -39,7 +39,7 @@ export default {
   }),
   methods: {
     goToProfilePage() {
-      this.$router.push({ path: `/profile/${this.currentUser.id}` })
+      this.$router.push({ path: "/profile/60959239-a936-481b-9b6c-cc8f49aa3cd5"})
     },
     goToExplorePage() {
       this.$router.push({ path: "/explore" })

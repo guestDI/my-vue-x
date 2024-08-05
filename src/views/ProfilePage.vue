@@ -28,7 +28,7 @@
         </div>
         <button
           @click="handleFollow"
-          v-if="currentUser.id !== id"
+          v-if="author.recordId !== currentUserId"
           class="bg-white hover:bg-gray-100 text-gray-600 font-bold py-2 px-4 rounded"
         >
           {{getBtnTitle}}
@@ -72,7 +72,7 @@
           </button>
           <button
             @click="setActiveTab('Likes')"
-            v-if="currentUser.id === id"
+            v-if="author.recordId === currentUserId"
             :class="
               activeTab === 'Likes'
                 ? 'border-blue-500 text-white'
@@ -113,7 +113,7 @@ export default {
     return {
       author: {},
       id: this.$route.params.id,
-      currentUser: {},
+      currentUserId: '60959239-a936-481b-9b6c-cc8f49aa3cd5',
       activeTab: 'Posts',
       posts: []
     };
@@ -131,7 +131,7 @@ export default {
       this.$router.push("/");
     },
     handleFollow() {
-      if(this.author?.followers?.includes(this.currentUser.id)) {
+      if(this.author?.followers?.includes(this.currentUserId)) {
         this.unfollow();
       } else {
         this.follow();
@@ -190,7 +190,7 @@ export default {
   },
   computed: {
     getBtnTitle() {
-      return this.author?.followers?.includes(this.currentUser.id) ? 'Unfollow' : 'Follow'
+      return this.author?.followers?.includes(this.currentUserId) ? 'Unfollow' : 'Follow'
     }
   },
   apollo: {

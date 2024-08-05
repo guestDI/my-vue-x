@@ -18,15 +18,12 @@ export const TWEETS_QUERY = gql`
 export const AUTHOR_QUERY = gql`
   query AuthorQuery($id: ID!) {
     author(id: $id) {
+      recordId  
       name
       username
       image
       followers
       following
-      tweets {
-          id
-          text
-      }  
     }
   }
 `;

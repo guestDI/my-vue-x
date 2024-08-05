@@ -44,7 +44,7 @@
               <p class="text-primary-400 mr-0">
                 <router-link
                   class="text-white mr-0"
-                  :to="`/profile/${tweet.author.id}`"
+                  :to="`/profile/${tweet.author.recordId}`"
                   >{{ tweet.author.name }}</router-link
                 >
               </p>
