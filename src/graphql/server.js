@@ -24,7 +24,7 @@ export const schema = makeExecutableSchema({
     }
 
     type Author {
-      id: ID!
+      recordId: String!  
       name: String!
       username: String!
       image: String
@@ -35,6 +35,7 @@ export const schema = makeExecutableSchema({
 
     type Tweet {
       id: ID!
+      tweetId: String!
       text: String!
       author: Author!
     }

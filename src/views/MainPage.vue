@@ -24,7 +24,7 @@
     <div v-else class="flex-1 overflow-y-auto space-y-6 mt-4">
       <div
         v-for="(tweet, index) in tweets"
-        :key="tweet.id"
+        :key="tweet.tweetId"
         class="bg-gray-800 p-4 rounded-lg"
       >
         <div class="flex items-center mb-2">
@@ -105,9 +105,6 @@ export default {
     selectedTweet: null
   }),
   methods: {
-    showModal() {
-      this.isModalVisible = true;
-    },
     closeModal() {
       this.isModalVisible = false;
     },

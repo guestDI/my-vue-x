@@ -3,12 +3,20 @@ const resolvers = {
   // Define resolvers for queries
   Query: {
     // Return all users // rename to authors
-    authors(_, args, { db }) {
-      return db.authors;
+    async authors(_, args, { prisma }) {
+      return prisma.author.findMany({
+        orderBy: [{
+          name: "desc"
+        }]
+      });
     },
     // Return all tweets
-    tweets(_, args, { db }) {
-      return db.tweets;
+    async tweets(_, args, { prisma }) {
+      return prisma.tweet.findMany({
+        orderBy: [{
+          createdAt: "desc"
+        }]
+      });
     },
     author: (_, args, { db }) => {
       const author = db.authors.find((author) => author.id === args.id)
@@ -23,8 +31,12 @@ const resolvers = {
     }
   },
   Tweet: {
-    author(parent, _, { db }) {
-      return db.authors.find((user) => user.id === parent.authorId);
+    async author(parent, _, { prisma }) {
+      return await prisma.author.findUnique({
+        where: {
+          recordId: parent.authorId,
+        },
+      })
     },
   },
   Author: {
