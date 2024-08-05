@@ -86,7 +86,6 @@
 <script>
 import { TWEETS_QUERY } from "../graphql/queries";
 import { ADD_TWEET } from "../graphql/mutations";
-import { v4 as uuidv4 } from "uuid";
 import LikeIconOutlined from "../components/LikeIconOutlined.vue";
 import CommentsIconOutlined from "../components/CommentsIconOutlined.vue";
 import ShareIcon from "../components/ShareIcon.vue";
@@ -118,18 +117,13 @@ export default {
         .mutate({
           mutation: ADD_TWEET,
           variables: {
-            id: uuidv4(),
             authorId: this.currentUserId,
             text: this.tweet,
           },
-          update: (cache, { data: { addTweet } }) => {
-            let data = cache.readQuery({ query: TWEETS_QUERY });
-            data = {
-              ...data,
-              tweets: [...data.tweets, addTweet],
-            };
-            cache.writeQuery({ query: TWEETS_QUERY, data });
-          },
+          refetchQueries: [
+            TWEETS_QUERY, // DocumentNode object parsed with gql
+            'TweetsQuery' // Query name
+          ],
         })
         .then((data) => {
           console.log("Done.", data);

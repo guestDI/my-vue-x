@@ -21,7 +21,7 @@ const resolvers = {
       });
     },
     async author(_, args, { prisma }) {
-      return await prisma.author.findUnique({
+      return prisma.author.findUnique({
         where: {
           recordId: args.id,
         },
@@ -53,25 +53,50 @@ const resolvers = {
     }
   },
   Mutation: {
-    addTweet(_, args, { db }) {
-      const tweet = {
-        ...args.data,
-      };
-
-      db.tweets.push(tweet);
-
-      return tweet;
+    addTweet(_, args, { db, prisma }) {
+      return prisma.tweet.create({
+        data: {
+          tweetId: uuidv4(),
+          text: args.data.text,
+          authorId: args.data.authorId
+        }
+      })
     },
-    follow(_, args, { db }) {
-      const authorIdx = db.authors.findIndex((author) => author.id === args.authorId);
-      //find user how start follow
-      const userIdx = db.authors.findIndex((author) => author.id === args.id);
-      if (authorIdx > -1 ) {
-        db.authors[authorIdx].followers.push(args.id);
-        db.authors[userIdx].following.push(args.authorId);
-      }
+    async follow(_, { authorId, id }, { prisma }) {
+      const authorObj = await prisma.author.findUnique({
+        where: {
+          recordId: authorId,
+        },
+      })
 
-      return args.id;
+      const followerObj = await prisma.author.findUnique({
+        where: {
+          recordId: id,
+        },
+      })
+
+      const res = await prisma.$transaction(
+        [
+          prisma.author.update({
+            where: {
+              recordId: authorId,
+            },
+            data: {
+              followers: [...authorObj.followers, id],
+            },
+          }),
+          prisma.author.update({
+            where: {
+              recordId: id,
+            },
+            data: {
+              following: [...followerObj.following, authorId],
+            },
+          })
+        ]
+      )
+
+      return !!res?.length;
     },
     unfollow(_, args, { db }) {
       const authorIdx = db.authors.findIndex((author) => author.id === args.authorId);

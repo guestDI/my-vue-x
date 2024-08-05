@@ -1,9 +1,10 @@
 import gql from "graphql-tag";
 
 export const ADD_TWEET = gql`
-  mutation addTweet($id: ID!, $text: String!, $authorId: ID!) {
-    addTweet(data: { id: $id, text: $text, authorId: $authorId }) {
+  mutation addTweet($text: String!, $authorId: ID!) {
+    addTweet(data: { text: $text, authorId: $authorId }) {
       id
+      tweetId  
       text
       author {
         recordId
@@ -17,13 +18,13 @@ export const ADD_TWEET = gql`
 
 export const FOLLOW = gql`
     mutation follow($authorId: ID!, $id: ID!) {
-        follow(authorId: $authorId, id: $id) 
+      follow(authorId: $authorId, id: $id) 
     }
 `;
 
 export const UNFOLLOW = gql`
     mutation unfollow($authorId: ID!, $id: ID!) {
-        unfollow(authorId: $authorId, id: $id)
+      unfollow(authorId: $authorId, id: $id)
     }
 `;
 
