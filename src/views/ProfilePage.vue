@@ -28,7 +28,7 @@
         </div>
         <button
           @click="handleFollow"
-          v-if="author.recordId !== currentUserId"
+          v-if="author.recordId !== me.recordId"
           class="bg-white hover:bg-gray-100 text-gray-600 font-bold py-2 px-4 rounded"
         >
           {{getBtnTitle}}
@@ -73,7 +73,7 @@
           </button>
           <button
             @click="setActiveTab('Likes')"
-            v-if="author.recordId === currentUserId"
+            v-if="author.recordId === me.recordId"
             :class="
               activeTab === 'Likes'
                 ? 'border-blue-500 text-white'
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { AUTHOR_QUERY, AUTHOR_TWEETS } from "../graphql/queries";
+import { AUTHOR_QUERY, AUTHOR_TWEETS, ME, TWEETS_QUERY } from "../graphql/queries";
 import { FOLLOW, UNFOLLOW } from "../graphql/mutations.js";
 
 export default {
@@ -115,16 +115,16 @@ export default {
     return {
       author: {},
       id: this.$route.params.id,
-      currentUserId: '60959239-a936-481b-9b6c-cc8f49aa3cd5',
+      me: {},
       activeTab: 'Posts',
       authorTweets: [],
       loading: 0,
       userLoading: false
     };
   },
-  created() {
-    this.loadAuthorFromCacheOrServer();
-  },
+  // created() {
+  //   this.loadAuthorFromCacheOrServer();
+  // },
   watch: {
     '$route'() {
       this.id = this.$route.params.id;
@@ -165,7 +165,7 @@ export default {
       this.$router.push("/");
     },
     handleFollow() {
-      if(this.author?.followers?.includes(this.currentUserId)) {
+      if(this.author?.followers?.includes(this.me.recordId)) {
         this.unfollow();
       } else {
         this.follow();
@@ -178,19 +178,9 @@ export default {
           mutation: FOLLOW,
           variables: {
             authorId: this.id,
-            id: this.currentUserId,
+            id: this.me.recordId,
           },
-          update: (cache, { data: { follow } }) => {
-            let data = cache.readQuery({ query: AUTHOR_QUERY, variables: { id: this.id} });
-            data = {
-              author: {
-                ...data.author,
-                followers: [...data.author.followers, follow],
-              },
-            };
-
-            cache.writeQuery({ query: AUTHOR_QUERY, data });
-          },
+          refetchQueries: [AUTHOR_QUERY, ME]
         })
         .then((data) => {
           console.log("Done.", data);
@@ -203,19 +193,9 @@ export default {
           mutation: UNFOLLOW,
           variables: {
             authorId: this.id,
-            id: this.currentUserId,
+            id: this.me.recordId,
           },
-          update: (cache, { data: { unfollow } }) => {
-            let data = cache.readQuery({ query: AUTHOR_QUERY, variables: { id: this.id} });
-            data = {
-              author: {
-                ...data.author,
-                followers: data.author.followers.filter((follower) => follower !== unfollow),
-              },
-            };
-
-            cache.writeQuery({ query: AUTHOR_QUERY, data });
-          },
+          refetchQueries: [AUTHOR_QUERY, ME]
         })
         .then((data) => {
           console.log("Done.", data);
@@ -224,7 +204,7 @@ export default {
   },
   computed: {
     getBtnTitle() {
-      return this.author?.followers?.includes(this.currentUserId) ? 'Unfollow' : 'Follow'
+      return this.author?.followers?.includes(this.me.recordId) ? 'Unfollow' : 'Follow'
     }
   },
   apollo: {
@@ -236,6 +216,18 @@ export default {
         };
       },
       loadingKey: "loading",
+    },
+    me: {
+      query: ME,
+      prefetch: true,
+    },
+    author: {
+      query: AUTHOR_QUERY,
+      variables() {
+        return {
+          id: this.id,
+        };
+      },
     }
   },
 };

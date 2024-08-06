@@ -44,6 +44,7 @@ export const ME = gql`
     me {
       recordId  
       liked
+      following  
     }
   }
 `
