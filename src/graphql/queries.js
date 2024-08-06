@@ -25,6 +25,7 @@ export const AUTHOR_QUERY = gql`
       image
       followers
       following
+      liked
     }
   }
 `;
@@ -34,6 +35,15 @@ export const AUTHOR_TWEETS = gql`
     authorTweets(authorId: $authorId){
       tweetId
       text
+    }
+  }
+`
+
+export const ME = gql`
+  query MeQuery {
+    me {
+      recordId  
+      liked
     }
   }
 `

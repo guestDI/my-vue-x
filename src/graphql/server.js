@@ -13,6 +13,7 @@ export const schema = makeExecutableSchema({
       authors: [Author!]!
       tweets: [Tweet!]!
       author(id: ID!): Author!
+      me: Author!
       posts(id: ID!): [Tweet]!
       authorTweets(authorId: ID!): [Tweet!]!
     }
@@ -24,7 +25,7 @@ export const schema = makeExecutableSchema({
       signUp(data: AuthPayload!): Author!
       signIn(username: String!): Author
       like(tweetId: ID!, userId: ID!): Int!
-#      unlike(tweetId: ID!, userId: ID!): Int!
+      unlike(tweetId: ID!, userId: ID!): Int!
     }
 
     type Author {
@@ -35,6 +36,7 @@ export const schema = makeExecutableSchema({
       following: [String]!
       followers: [String]!
       tweets: [Tweet]!
+      liked: [String]!
     }
 
     type Tweet {

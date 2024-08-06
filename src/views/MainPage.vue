@@ -59,9 +59,9 @@
           {{ tweet.text }}
         </p>
         <div class="grid grid-cols-4 gap-4 place-items-center border-t border-gray-700 pt-1 mt-4 px-4">
-          <IconButton @click="like(tweet.tweetId)">
-<!--            <LikeIconFilled v-if="tweet.likes?.includes(currentUserId)"/>-->
-            <LikeIconOutlined/>
+          <IconButton @click="handleLike(tweet.tweetId)">
+            <LikeIconFilled v-if="me?.liked?.includes(tweet.tweetId)"/>
+            <LikeIconOutlined v-else/>
             <template #count>
               {{tweet.likes}}
             </template>
@@ -88,8 +88,8 @@
 </template>
 
 <script>
-import { TWEETS_QUERY } from "../graphql/queries";
-import { ADD_TWEET, LIKE } from "../graphql/mutations";
+import { ME, TWEETS_QUERY } from "../graphql/queries";
+import { ADD_TWEET, LIKE, UNLIKE } from "../graphql/mutations";
 import LikeIconOutlined from "../components/LikeIconOutlined.vue";
 import CommentsIconOutlined from "../components/CommentsIconOutlined.vue";
 import ShareIcon from "../components/ShareIcon.vue";
@@ -105,10 +105,18 @@ export default {
     loading: 0,
     tweet: "",
     currentUserId: '60959239-a936-481b-9b6c-cc8f49aa3cd5',
+    me: {},
     isModalVisible: false,
     selectedTweet: null
   }),
   methods: {
+    handleLike(tweetId) {
+      if(this.me?.liked?.includes(tweetId)) {
+        this.unlike(tweetId);
+      } else {
+        this.like(tweetId);
+      }
+    },
     closeModal() {
       this.isModalVisible = false;
     },
@@ -122,7 +130,7 @@ export default {
         .mutate({
           mutation: ADD_TWEET,
           variables: {
-            authorId: this.currentUserId,
+            authorId: this.me.recordId,
             text: this.tweet,
           },
           refetchQueries: [
@@ -140,21 +148,73 @@ export default {
           mutation: LIKE,
           variables: {
             tweetId: tweetId,
-            userId: this.currentUserId,
+            userId: this.me.recordId,
           },
-          refetchQueries: [
-            TWEETS_QUERY, // DocumentNode object parsed with gql
-            'TweetsQuery' // Query name
-          ],
+          update: (cache, { data: { like } }) => {
+            // Update the tweets cache
+            const tweetsData = cache.readQuery({ query: TWEETS_QUERY });
+            const updatedTweets = tweetsData.tweets.map(tweet =>
+              tweet.tweetId === tweetId
+                ? { ...tweet, likes: like }
+                : tweet
+            );
+            cache.writeQuery({
+              query: TWEETS_QUERY,
+              data: { tweets: updatedTweets }
+            });
+
+            // Update the me cache
+            const meData = cache.readQuery({ query: ME });
+            const updatedMe = {
+              ...meData.me,
+              liked: [...meData.me.liked, tweetId]
+            };
+            cache.writeQuery({
+              query: ME,
+              data: { me: updatedMe }
+            });
+          }
         })
         .then((data) => {
-          console.log("Done.", data);
+          console.log("Liked.", data);
         });
-    }
-  },
-  computed: {
-    getLikeBtnAction() {
-      return this.author?.followers?.includes(this.currentUserId) ? 'Unfollow' : 'Follow'
+    },
+    unlike(tweetId){
+      this.$apollo
+        .mutate({
+          mutation: UNLIKE,
+          variables: {
+            tweetId: tweetId,
+            userId: this.me.recordId,
+          },
+          update: (cache, { data: { unlike } }) => {
+            // Update the tweets cache
+            const tweetsData = cache.readQuery({ query: TWEETS_QUERY });
+            const updatedTweets = tweetsData.tweets.map(tweet =>
+              tweet.tweetId === tweetId
+                ? { ...tweet, likes: unlike }
+                : tweet
+            );
+            cache.writeQuery({
+              query: TWEETS_QUERY,
+              data: { tweets: updatedTweets }
+            });
+
+            // Update the me cache
+            const meData = cache.readQuery({ query: ME });
+            const updatedMe = {
+              ...meData.me,
+              liked: meData.me.liked.filter(id => id !== tweetId)
+            };
+            cache.writeQuery({
+              query: ME,
+              data: { me: updatedMe }
+            });
+          }
+        })
+        .then((data) => {
+          console.log("Unliked.", data);
+        });
     }
   },
   // Apollo GraphQL
@@ -165,6 +225,10 @@ export default {
       loadingKey: "loading",
       prefetch: true,
     },
+    me: {
+      query: ME,
+      prefetch: true,
+    }
   },
 };
 </script>

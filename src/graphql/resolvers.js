@@ -5,7 +5,14 @@ import { authorLoader } from "./loaders/authorLoader.js";
 const resolvers = {
   // Define resolvers for queries
   Query: {
-    // Return all users // rename to authors
+    async me(_, args, { prisma }) {
+      return prisma.author.findUnique({
+        where: {
+          recordId: "60959239-a936-481b-9b6c-cc8f49aa3cd5",
+        },
+      })
+    },
+    // Return all authors
     async authors(_, args, { prisma }) {
       return prisma.author.findMany({
         orderBy: [{
@@ -37,7 +44,8 @@ const resolvers = {
           createdAt: "desc"
         }]
       });
-    }
+    },
+
   },
   Tweet: {
     async author(parent, _, { prisma }) {
@@ -173,6 +181,46 @@ const resolvers = {
             },
             data: {
               liked: [...userObj.liked, tweetId],
+            },
+          })
+        ]
+      )
+
+      return likes;
+    },
+    async unlike(_, { tweetId, userId }, { prisma }) {
+      const tweetObj = await prisma.tweet.findUnique({
+        where: {
+          tweetId: tweetId,
+        },
+      })
+
+      const likes =  tweetObj.likes > 0 ? tweetObj.likes - 1 : 0;
+
+      const userObj = await prisma.author.findUnique({
+        where: {
+          recordId: userId,
+        },
+      })
+
+      const updatedLiked = userObj.liked.filter((l) => l !== tweetId);
+
+      await prisma.$transaction(
+        [
+          prisma.tweet.update({
+            where: {
+              tweetId: tweetId,
+            },
+            data: {
+              likes: likes,
+            },
+          }),
+          prisma.author.update({
+            where: {
+              recordId: userId,
+            },
+            data: {
+              liked: updatedLiked,
             },
           })
         ]

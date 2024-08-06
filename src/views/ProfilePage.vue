@@ -228,14 +228,6 @@ export default {
     }
   },
   apollo: {
-    // author: {
-    //   query: AUTHOR_QUERY,
-    //   variables() {
-    //     return {
-    //       id: this.id,
-    //     };
-    //   },
-    // },
     authorTweets: {
       query: AUTHOR_TWEETS,
       variables() {
