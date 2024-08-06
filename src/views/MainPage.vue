@@ -59,9 +59,13 @@
           {{ tweet.text }}
         </p>
         <div class="grid grid-cols-4 gap-4 place-items-center border-t border-gray-700 pt-1 mt-4 px-4">
-          <IconButton>
+          <IconButton @click="like(tweet.tweetId)">
+<!--            <LikeIconFilled v-if="tweet.likes?.includes(currentUserId)"/>-->
             <LikeIconOutlined/>
-          </IconButton>
+            <template #count>
+              {{tweet.likes}}
+            </template>
+            </IconButton>
           <IconButton>
             <RepostIcon/>
           </IconButton>
@@ -85,16 +89,17 @@
 
 <script>
 import { TWEETS_QUERY } from "../graphql/queries";
-import { ADD_TWEET } from "../graphql/mutations";
+import { ADD_TWEET, LIKE } from "../graphql/mutations";
 import LikeIconOutlined from "../components/LikeIconOutlined.vue";
 import CommentsIconOutlined from "../components/CommentsIconOutlined.vue";
 import ShareIcon from "../components/ShareIcon.vue";
 import RepostIcon from "../components/RepostIcon.vue";
 import IconButton from "../components/IconButton.vue";
 import Modal from "../components/Modal.vue";
+import LikeIconFilled from "../components/LikeIconFilled.vue";
 
 export default {
-  components: { IconButton, RepostIcon, ShareIcon, CommentsIconOutlined, LikeIconOutlined, Modal },
+  components: { LikeIconFilled, IconButton, RepostIcon, ShareIcon, CommentsIconOutlined, LikeIconOutlined, Modal },
   data: () => ({
     tweets: [],
     loading: 0,
@@ -129,6 +134,28 @@ export default {
           console.log("Done.", data);
         });
     },
+    like(tweetId){
+      this.$apollo
+        .mutate({
+          mutation: LIKE,
+          variables: {
+            tweetId: tweetId,
+            userId: this.currentUserId,
+          },
+          refetchQueries: [
+            TWEETS_QUERY, // DocumentNode object parsed with gql
+            'TweetsQuery' // Query name
+          ],
+        })
+        .then((data) => {
+          console.log("Done.", data);
+        });
+    }
+  },
+  computed: {
+    getLikeBtnAction() {
+      return this.author?.followers?.includes(this.currentUserId) ? 'Unfollow' : 'Follow'
+    }
   },
   // Apollo GraphQL
   apollo: {

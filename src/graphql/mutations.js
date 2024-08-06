@@ -28,3 +28,9 @@ export const UNFOLLOW = gql`
     }
 `;
 
+export const LIKE = gql`
+    mutation like($tweetId: ID!, $userId: ID!) {
+        like(tweetId: $tweetId, userId: $userId)
+    }
+`;
+

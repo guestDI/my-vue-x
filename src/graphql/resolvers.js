@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { authorLoader } from "./loaders/authorLoader.js";
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
@@ -27,17 +28,20 @@ const resolvers = {
         },
       })
     },
-    posts: (_, args, { db }) => {
-      return db.tweets.filter((tweet) => tweet.authorId === args.id);
+    authorTweets: (_, { authorId }, { prisma }) => {
+      return prisma.tweet.findMany({
+        where: {
+          authorId: authorId,
+        },
+        orderBy: [{
+          createdAt: "desc"
+        }]
+      });
     }
   },
   Tweet: {
     async author(parent, _, { prisma }) {
-      return await prisma.author.findUnique({
-        where: {
-          recordId: parent.authorId,
-        },
-      })
+      return authorLoader.load(parent.authorId)
     },
   },
   Author: {

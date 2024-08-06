@@ -40,7 +40,8 @@
           Back
         </button>
       </div>
-      <div class="p-6 space-y-4 text-left">
+      <h3 v-if="userLoading">Loading...</h3>
+      <div v-else class="p-6 space-y-4 text-left">
         <section>
           <h2 class="text-xl font-semibold text-white">Bio</h2>
           <p class="mt-2 text-gray-300 text-left">
@@ -85,8 +86,10 @@
         </div>
         <div class="flex-1 overflow-y-auto p-2 space-y-6">
           <div v-if="activeTab === 'Posts'" class="bg-gray-800 rounded-lg">
+            <h3 v-if="loading">Loading...</h3>
             <div
-              v-for="tweet in author.tweets"
+              v-else
+              v-for="tweet in authorTweets"
               :key="tweet.tweetId"
               class="bg-gray-700 p-4 rounded-lg mb-2"
             >
@@ -103,11 +106,10 @@
 </template>
 
 <script>
-import { AUTHOR_QUERY} from "../graphql/queries";
+import { AUTHOR_QUERY, AUTHOR_TWEETS } from "../graphql/queries";
 import { FOLLOW, UNFOLLOW } from "../graphql/mutations.js";
 
 export default {
-
   name: "ProfilePage",
   data() {
     return {
@@ -115,15 +117,47 @@ export default {
       id: this.$route.params.id,
       currentUserId: '60959239-a936-481b-9b6c-cc8f49aa3cd5',
       activeTab: 'Posts',
-      posts: []
+      authorTweets: [],
+      loading: 0,
+      userLoading: false
     };
+  },
+  created() {
+    this.loadAuthorFromCacheOrServer();
   },
   watch: {
     '$route'() {
       this.id = this.$route.params.id;
+      this.loadAuthorFromCacheOrServer();
     }
   },
   methods: {
+    loadAuthorFromCacheOrServer() {
+      this.userLoading = true;
+      try {
+        const cachedData = this.$apollo.provider.defaultClient.readQuery({
+          query: AUTHOR_QUERY,
+          variables: { id: this.id }
+        });
+        if (cachedData) {
+          this.userLoading = false;
+          this.author = cachedData.author;
+        } else {
+          this.loadAuthorFromServer();
+        }
+      } catch (e) {
+        this.loadAuthorFromServer();
+      }
+    },
+    loadAuthorFromServer() {
+      this.$apollo.query({
+        query: AUTHOR_QUERY,
+        variables: { id: this.id }
+      }).then((response) => {
+        this.author = response.data.author;
+        this.userLoading = false;
+      });
+    },
     setActiveTab(tab) {
       this.activeTab = tab;
     },
@@ -194,13 +228,22 @@ export default {
     }
   },
   apollo: {
-    author: {
-      query: AUTHOR_QUERY,
+    // author: {
+    //   query: AUTHOR_QUERY,
+    //   variables() {
+    //     return {
+    //       id: this.id,
+    //     };
+    //   },
+    // },
+    authorTweets: {
+      query: AUTHOR_TWEETS,
       variables() {
         return {
-          id: this.id,
+          authorId: this.id,
         };
       },
+      loadingKey: "loading",
     }
   },
 };

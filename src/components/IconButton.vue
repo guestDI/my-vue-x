@@ -7,6 +7,9 @@
     <span>
       <slot></slot>
     </span>
+    <span class="text-gray-500 ml-1">
+      <slot name="count"></slot>
+    </span>
   </button>
 </template>
 
