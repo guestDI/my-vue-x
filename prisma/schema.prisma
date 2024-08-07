@@ -23,6 +23,7 @@ model Author {
   following String[]
   liked String[]
   tweets Tweet[]
+  comments Comment[]
 }
 
 model Tweet {
@@ -33,4 +34,16 @@ model Tweet {
   createdAt DateTime @default(now())
   authorId String
   author Author @relation(fields: [authorId], references: [recordId])
+  comments Comment[]
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  commentId String @unique
+  text String
+  createdAt DateTime @default(now())
+  authorId String
+  tweetRecordId String
+  author Author @relation(fields: [authorId], references: [recordId])
+  tweet Tweet @relation(fields: [tweetRecordId], references: [tweetId])
 }

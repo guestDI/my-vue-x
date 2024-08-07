@@ -6,6 +6,9 @@ export const TWEETS_QUERY = gql`
       tweetId
       text
       likes  
+      comments {
+        text
+      }  
       author {
         recordId
         name

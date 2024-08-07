@@ -1,10 +1,37 @@
 <script>
+import { ADD_COMMENT } from "../graphql/mutations.js";
+import { TWEETS_QUERY } from "../graphql/queries.js";
+
 export default {
   name: "Modal",
-  props: ['tweet'],
+  props: ['tweet', 'me'],
+  data: () => ({
+    comment: ""
+  }),
   methods: {
     close() {
       this.$emit('close');
+    },
+    addComment() {
+      // Mutation
+      this.$apollo
+        .mutate({
+          mutation: ADD_COMMENT,
+          variables: {
+            userId: this.me.recordId,
+            text: this.comment,
+            tweetId: this.tweet.tweetId,
+          },
+          refetchQueries: [
+            TWEETS_QUERY, // DocumentNode object parsed with gql
+            'TweetsQuery' // Query name
+          ],
+        })
+        .then((data) => {
+          this.comment = "";
+          this.close();
+          console.log("Done.", data);
+        });
     },
   },
 };
@@ -67,6 +94,7 @@ export default {
             class="w-full p-2 bg-gray-800 text-white rounded-lg"
             rows="3"
             placeholder="Post you reply"
+            v-model="comment"
           ></textarea>
         </div>
       </section>
@@ -75,6 +103,7 @@ export default {
         <button
           type="button"
           class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full"
+          @click="addComment"
         >
           Reply
         </button>

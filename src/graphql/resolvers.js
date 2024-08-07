@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { authorLoader } from "./loaders/authorLoader.js";
+import { commentLoader } from "./loaders/commentLoader.js";
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
@@ -22,11 +23,12 @@ const resolvers = {
     },
     // Return all tweets
     async tweets(_, args, { prisma }) {
-      return prisma.tweet.findMany({
+      const res = await prisma.tweet.findMany({
         orderBy: [{
           createdAt: "desc"
         }]
       });
+      return res
     },
     async author(_, args, { prisma }) {
       return prisma.author.findUnique({
@@ -48,8 +50,16 @@ const resolvers = {
 
   },
   Tweet: {
-    async author(parent, _, { prisma }) {
+    async author(parent, _, context) {
       return authorLoader.load(parent.authorId)
+    },
+    async comments(parent, _, { prisma }) {
+      // add loader
+      return prisma.comment.findMany({
+        where: {
+          tweetRecordId: parent.tweetId
+        }
+      })
     },
   },
   Author: {
@@ -65,12 +75,23 @@ const resolvers = {
     }
   },
   Mutation: {
-    addTweet(_, args, { db, prisma }) {
+    addTweet(_, args, { prisma }) {
       return prisma.tweet.create({
         data: {
           tweetId: uuidv4(),
           text: args.data.text,
           authorId: args.data.authorId
+        }
+      })
+    },
+    addComment(_, { data: { tweetId, userId, text } }, { prisma }) {
+      console.log('tw', tweetId, userId, text)
+      return prisma.comment.create({
+        data: {
+          commentId: uuidv4(),
+          text: text,
+          tweetRecordId: tweetId,
+          authorId: userId,
         }
       })
     },

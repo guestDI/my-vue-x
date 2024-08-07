@@ -71,6 +71,9 @@
           </IconButton>
           <IconButton @click="addComment(index)">
             <CommentsIconOutlined/>
+            <template #count>
+              {{tweet.comments.length}}
+            </template>
           </IconButton>
           <IconButton>
             <ShareIcon/>
@@ -82,6 +85,7 @@
         v-show="isModalVisible"
         @close="closeModal"
         :tweet="tweets[selectedTweet]"
+        :me="me"
       />
     </div>
   </div>
@@ -139,6 +143,7 @@ export default {
           ],
         })
         .then((data) => {
+          this.tweet = "";
           console.log("Done.", data);
         });
     },
