@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
 import { authorLoader } from "./loaders/authorLoader.js";
-import { commentLoader } from "./loaders/commentLoader.js";
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
@@ -54,7 +53,6 @@ const resolvers = {
       return authorLoader.load(parent.authorId)
     },
     async comments(parent, _, { prisma }) {
-      // add loader
       return prisma.comment.findMany({
         where: {
           tweetRecordId: parent.tweetId
@@ -85,7 +83,6 @@ const resolvers = {
       })
     },
     addComment(_, { data: { tweetId, userId, text } }, { prisma }) {
-      console.log('tw', tweetId, userId, text)
       return prisma.comment.create({
         data: {
           commentId: uuidv4(),

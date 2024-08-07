@@ -13,7 +13,6 @@ export const schema = makeExecutableSchema({
       authors: [Author!]!
       tweets: [Tweet!]!
       author(id: ID!): Author!
-#      comment(id: ID!): Comment!
       me: Author!
       posts(id: ID!): [Tweet]!
       authorTweets(authorId: ID!): [Tweet!]!
@@ -24,14 +23,14 @@ export const schema = makeExecutableSchema({
       follow(authorId: ID!, id: ID!): Boolean!
       unfollow(authorId: ID!, id: ID!): Boolean!
       signUp(data: AuthPayload!): Author!
-      signIn(username: String!): Author
+      signIn(username: String!): Author!
       like(tweetId: ID!, userId: ID!): Int!
       unlike(tweetId: ID!, userId: ID!): Int!
-      addComment(data: CreateCommentInput): Comment!
+      addComment(data: CreateCommentInput!): Comment!
     }
 
     type Author {
-      recordId: ID!  
+      recordId: ID!
       name: String!
       username: String!
       image: String
@@ -40,20 +39,20 @@ export const schema = makeExecutableSchema({
       tweets: [Tweet]!
       liked: [String]!
     }
-    
+
     type Comment {
       commentId: ID!
       text: String!
       authorId: ID!
-      tweetRecordId: ID!  
+      tweetRecordId: ID!
     }
 
     type Tweet {
-      tweetId: String!
+      tweetId: ID!
       text: String!
-      likes: Int!  
+      likes: Int!
       author: Author!
-      comments: [Comment]!  
+      comments: [Comment]!
     }
 
     input CreateTweetInput {
@@ -66,7 +65,7 @@ export const schema = makeExecutableSchema({
       tweetId: ID!
       userId: ID!
     }
-    
+
     input AuthPayload {
       username: String!
       name: String!
